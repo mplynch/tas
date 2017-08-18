@@ -6,24 +6,32 @@
   "repository": "https://github.com/angular/angular-seed",
   "license": "MIT",
   "devDependencies": {
-    "bower": "^1.7.7",
-    "http-server": "^0.9.0"
-  },
-  "scripts": {
-    "bundle": "webpack",
-    "update-deps": "npm update",
-    "prestart": "npm install",
-    "start": "http-server -a localhost -p 8000 -c-1 ./app",
-    "update-index-async": "node -e \"var fs=require('fs'),indexFile='app/index-async.html',loaderFile='app/bower_components/angular-loader/angular-loader.min.js',loaderText=fs.readFileSync(loaderFile,'utf-8').split(/sourceMappingURL=angular-loader.min.js.map/).join('sourceMappingURL=bower_components/angular-loader/angular-loader.min.js.map'),indexText=fs.readFileSync(indexFile,'utf-8').split(/\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/).join('//@@NG_LOADER_START@@\\n'+loaderText+'    //@@NG_LOADER_END@@');fs.writeFileSync(indexFile,indexText);\"",
-    "webpack": "webpack"
-  },
-  "dependencies": {
     "@uirouter/angularjs": "^1.0.3",
     "angular": "^1.6.5",
     "angular-animate": "^1.6.5",
     "angular-bootstrap": "^0.12.2",
     "angular-loader": "^1.6.5",
     "bootstrap": "^3.3.7",
-    "html5-boilerplate": "^6.0.0"
-  }
+    "css-loader": "^0.28.5",
+    "file-loader": "^0.11.2",
+    "html-loader": "^0.5.1",
+    "http-server": "^0.9.0",
+    "imports-loader": "^0.7.1",
+    "jquery": "^3.2.1",
+    "ng-cache-loader": "0.0.25",
+    "style-loader": "^0.18.2",
+    "unminified-webpack-plugin": "^1.2.0",
+    "url-loader": "^0.5.9",
+    "webpack": "^3.5.5",
+    "webpack-dev-server": "^2.7.1"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.prod.js -p",
+    "prestart": "npm install",
+    "start": "webpack-dev-server --inline --hot",
+    "update-deps": "npm update",
+    "update-index-async": "node -e \"var fs=require('fs'),indexFile='app/index-async.html',loaderFile='app/bower_components/angular-loader/angular-loader.min.js',loaderText=fs.readFileSync(loaderFile,'utf-8').split(/sourceMappingURL=angular-loader.min.js.map/).join('sourceMappingURL=bower_components/angular-loader/angular-loader.min.js.map'),indexText=fs.readFileSync(indexFile,'utf-8').split(/\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/).join('//@@NG_LOADER_START@@\\n'+loaderText+'    //@@NG_LOADER_END@@');fs.writeFileSync(indexFile,indexText);\"",
+    "webpack": "webpack"
+  },
+  "dependencies": {}
 }

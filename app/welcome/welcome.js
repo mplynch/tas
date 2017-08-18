@@ -1,11 +1,13 @@
 'use strict';
 
+var moduleTemplate = import('./welcome.html');
+
 angular.module('myApp.welcome', ['ui.router'])
 
 .config(['$stateProvider', function($stateProvider) {
   $stateProvider.state('welcome', {
     url: '/',
-    templateUrl: 'welcome/welcome.html',
+    template: moduleTemplate,
     controller: 'WelcomeCtrl'
   });
 }])
