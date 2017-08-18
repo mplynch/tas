@@ -13,7 +13,7 @@ A Jacobs Connected Enterprise tool used for assigning personnel tracking tags.
 1. Clone this respository
 2. Navigate to your clone and run `npm install`
 3. Run `npm start` to launch the webserver
-4. Navigate to `http://localhost:8000/` to verify that the webserver is running
+4. Navigate to `http://localhost:8080/` to verify that the webserver is running
 
 ## Contributing
 

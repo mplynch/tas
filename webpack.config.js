@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var OpenBrowserPlugin = require('open-browser-webpack-plugin');
 
 module.exports = {
   context: __dirname + '/app',
@@ -60,6 +61,7 @@ module.exports = {
         jQuery: 'jquery',
         $: 'jquery',
         jquery: 'jquery'
-      })
+      }),
+      new OpenBrowserPlugin({ url: 'http://localhost:8080' })
     ]
   };
