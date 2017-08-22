@@ -1,0 +1,15 @@
+<h4>What type of person will be assigned this tag?</h4>
+<p>
+  <select ng-model="association.type">
+    <option ng-repeat="type in types | orderBy:'text'" value="{{type}}">{{type}}</option>
+  </select>
+</p>
+<br/>
+<p>
+  <a ui-sref="associate.type">
+    <button class="btn btn-lg btn-default" type="button">Back</button>
+  </a>
+  <a ui-sref="new.source">
+    <button class="btn btn-lg btn-success" type="button">Next</button>
+  </a>
+</p>

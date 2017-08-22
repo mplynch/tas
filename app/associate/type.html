@@ -1,0 +1,12 @@
+<h4>What type of person will be assigned this tag?</h4>
+<p>
+  <select ng-model="association.type" required>
+    <option ng-repeat="type in types | orderBy:'text'" value="{{type}}">{{type}}</option>
+  </select>
+</p>
+<br/>
+<p>
+  <a ng-click="getNextStateFromType()">
+    <button class="btn btn-lg btn-primary" type="button" ng-disabled="$invalid">Next</button>
+  </a>
+</p>
