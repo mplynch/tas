@@ -1,15 +1,20 @@
-<h4>What type of person will be assigned this tag?</h4>
+<h4>Please scan the barcode of the tag being assigned.</h4>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <img class="img-responsive center-block" src="/img/iTAG100.jpg">
+      <input type="text" class="form-control" id="macAddress" ng-model="association.macAddress" focus="true" placeholder="Barcode">
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+</div>
+<p>&nbsp;</p>
 <p>
-  <select ng-model="association.type">
-    <option ng-repeat="type in types | orderBy:'text'" value="{{type}}">{{type}}</option>
-  </select>
-</p>
-<br/>
-<p>
-  <a ui-sref="associate.type">
+  <a ng-click="goToPreviousState()">
     <button class="btn btn-lg btn-default" type="button">Back</button>
   </a>
-  <a ui-sref="new.source">
-    <button class="btn btn-lg btn-success" type="button">Next</button>
+  <a ui-sref="associate.employee_finish">
+    <button class="btn btn-lg btn-primary" type="button">Next</button>
   </a>
 </p>

@@ -24,90 +24,110 @@ angular.module('myApp.associate', ['ui.router'])
   })
 
   .state('associate.type', {
-    url: 'associate/type',
     template: typeTemplate,
     controller: 'AssociateCtrl'
   })
 
   .state('associate.employee', {
-    url: 'associate/employee',
     template: employeeTemplate,
     controller: 'AssociateCtrl'
   })
 
+  .state('associate.employee_scan', {
+    template: scanTemplate,
+    controller: 'AssociateCtrl'
+  })
+
+  .state('associate.employee_finish', {
+    template: finishTemplate,
+    controller: 'AssociateCtrl'
+  })
+
   .state('associate.client', {
-    url: 'associate/client',
     template: clientTemplate,
     controller: 'AssociateCtrl'
   })
 
   .state('associate.visitor', {
-    url: 'associate/visitor',
     template: visitorTemplate,
     controller: 'AssociateCtrl'
   })
 
   .state('associate.subcontractor', {
-    url: 'associate/subcontractor',
     template: subcontractorTemplate,
     controller: 'AssociateCtrl'
   })
 
   .state('associate.scan', {
-    url: 'associate/scan',
     template: scanTemplate,
     controller: 'AssociateCtrl'
   })
 
   .state('associate.finish', {
-    url: 'associate/finish',
     template: finishTemplate,
     controller: 'AssociateCtrl'
   });
 }])
 
-.controller('AssociateCtrl', ['$scope', '$state', '$log', function($scope, $state, datastub, $log) {
+.directive('focus', function($timeout) {
+  return {
+    scope : {
+      trigger : '@focus'
+    },
+    link : function(scope, element) {
+      scope.$watch('trigger', function(value) {
+        if (value === "true") {
+          $timeout(function() {
+            element[0].focus();
+          });
+        }
+      });
+    }
+  };
+})
 
+.factory('datastub', function() {
+  var service = {};
+
+  service.employeeTypes = ['Jacobs Employee', 'Subcontractor', 'Visitor', 'Client'];
+
+  service.employees = ['Bob', 'Mary', 'Jane', 'Joe'];
+
+  return service;
+})
+
+
+.controller('AssociateCtrl', ['$scope', '$state', 'datastub', '$log', function($scope, $state, datastub, $log) {
   $scope.association = { };
-  $scope.types = ['Jacobs Employee', 'Subcontractor', 'Visitor', 'Client'];
+  $scope.types = datastub.employeeTypes;
+  $scope.employees = datastub.employees;
 
-  var stateOrder = ['associate.type'];
-  var currentState = stateOrder[0];
-
-  $scope.goToNextState = function() {
-    // TODO: Validate data and dynamically go to next state
-  };
-
-  $scope.goToPreviousState = function() {
-    // TODO: Go to previous state
-  };
-
-  $scope.getNextStateFromType = function(){
-    var nextState = "associate";
-
+  $scope.setPersonType = function(){
+    var nextState = "";
     switch ($scope.association.type)
     {
       case "Jacobs Employee":
-        nextState = "associate.employee";
-        break;
+      nextState = "associate.employee"
+      break;
       case "Subcontractor":
-        nextState = "associate.subcontractor";
-        break;
+      nextState = "associate.subcontractor";
+      break;
       case "Client":
-        nextState = "associate.client";
-        break;
+      nextState = "associate.client";
+      break;
       case "Visitor":
-        nextState = "associate.visitor";
-        break;
+      nextState = "associate.visitor";
+      break;
+      default:
+      nextState = "associate.type";
+      break;
     }
 
-    console.log(nextState);
+    console.log("new state: " + nextState);
     $state.go(nextState);
   };
 
-  $scope.processForm = function() {
+  $scope.submit = function() {
 
-
-    $state.go('associate.finished');
   };
 }]);

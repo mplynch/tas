@@ -1,12 +1,13 @@
-<h4>What type of person will be assigned this tag?</h4>
+<h4>Please review the association being made.</h4>
 <p>
-  <select ng-model="association.type" class="selectpicker" required>
-    <option ng-repeat="type in types | orderBy:'text'" value="{{type}}">{{type}}</option>
-  </select>
+  TODO: Show a list of stuff based upon the type of person chosen...
 </p>
 <br/>
 <p>
-  <a ui-sref="new.source">
-    <button class="btn btn-lg btn-primary" type="button" ng-disabled="$invalid">Next</button>
+  <a ui-sref="">
+    <button class="btn btn-lg btn-default" type="button">Back</button>
+  </a>
+  <a ui-sref="welcome">
+    <button class="btn btn-lg btn-success" type="button">Submit</button>
   </a>
 </p>

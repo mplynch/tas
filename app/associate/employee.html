@@ -1,15 +1,21 @@
 <h4>Which employee is being assigned a tag?</h4>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <select ng-model="association.name" class="form-control" required>
+        <option ng-repeat="employee in employees | orderBy:'text'" value="{{employee}}">{{employee}}</option>
+      </select>
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+</div>
+<p>&nbsp;</p>
 <p>
-  <select ng-model="association.type" class="selectpicker" required>
-    <option ng-repeat="type in types | orderBy:'text'" value="{{type}}">{{type}}</option>
-  </select>
-</p>
-<br/>
-<p>
-  <a ui-sref="associate.type">
+  <a ui-sref="">
     <button class="btn btn-lg btn-default" type="button">Back</button>
   </a>
-  <a ui-sref="new.source">
-    <button class="btn btn-lg btn-primary" type="button" ng-disabled="$invalid">Next</button>
+  <a ui-sref="associate.employee_scan">
+    <button class="btn btn-lg btn-primary" type="button">Next</button>
   </a>
 </p>

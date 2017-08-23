@@ -1,15 +1,20 @@
-<h4>Which client personnel is being assigned a tag?</h4>
+<h4>What is the visitor's name?</h4>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <input type="text" class="form-control" id="visitorName" placeholder="Name">
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+</div>
+<p>&nbsp;</p>
 <p>
-  <select ng-model="association.type" class="selectpicker" required>
-    <option ng-repeat="type in types | orderBy:'text'" value="{{type}}">{{type}}</option>
-  </select>
-</p>
-<br/>
-<p>
-  <a ui-sref="associate.type">
+  <a ng-click="goToPreviousState()">
     <button class="btn btn-lg btn-default" type="button">Back</button>
   </a>
-  <a ui-sref="new.source">
+  <a ng-click="goToNextState()">
     <button class="btn btn-lg btn-primary" type="button" ng-disabled="$invalid">Next</button>
   </a>
 </p>
