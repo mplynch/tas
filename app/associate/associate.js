@@ -76,6 +76,7 @@ angular.module('myApp.associate', ['ui.router'])
   $scope.types = datastub.employeeTypes;
   $scope.employees = datastub.employees;
   $scope.type = "";
+  $scope.isTypeValid = true;
 
   $scope.isTypeDefined = function() {
     return $scope.association.hasOwnProperty('type') && $scope.association.type != '';
@@ -84,11 +85,15 @@ angular.module('myApp.associate', ['ui.router'])
   $scope.validateType = function() {
       if ($scope.isTypeDefined()) {
         $state.go('associate.person');
+
+        $scope.isTypeValid = true;
       }
 
       else {
-        var myEl = angular.element( document.querySelector( '#div1' ) );
+        console.log('Validation error!');
+        var myEl = angular.element( document.querySelector( '#person_type' ) );
         myEl.addClass('has-error');
+        $scope.isTypeValid = false;
       }
   };
 
