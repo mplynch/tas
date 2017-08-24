@@ -6,12 +6,9 @@
 * find a better solution.  Can you? */
 var mainTemplate = require('./associate.html');
 var typeTemplate = require('./type.html');
-var employeeTemplate = require('./employee.html');
-var clientTemplate = require('./client.html');
-var subcontractorTemplate = require('./subcontractor.html');
-var visitorTemplate = require('./visitor.html');
 var scanTemplate = require('./scan.html');
 var finishTemplate = require('./finish.html');
+var personTemplate = require('./person.html');
 
 angular.module('myApp.associate', ['ui.router'])
 
@@ -28,33 +25,8 @@ angular.module('myApp.associate', ['ui.router'])
     controller: 'AssociateCtrl'
   })
 
-  .state('associate.employee', {
-    template: employeeTemplate,
-    controller: 'AssociateCtrl'
-  })
-
-  .state('associate.employee_scan', {
-    template: scanTemplate,
-    controller: 'AssociateCtrl'
-  })
-
-  .state('associate.employee_finish', {
-    template: finishTemplate,
-    controller: 'AssociateCtrl'
-  })
-
-  .state('associate.client', {
-    template: clientTemplate,
-    controller: 'AssociateCtrl'
-  })
-
-  .state('associate.visitor', {
-    template: visitorTemplate,
-    controller: 'AssociateCtrl'
-  })
-
-  .state('associate.subcontractor', {
-    template: subcontractorTemplate,
+  .state('associate.person', {
+    template: personTemplate,
     controller: 'AssociateCtrl'
   })
 
@@ -93,41 +65,34 @@ angular.module('myApp.associate', ['ui.router'])
 
   service.employees = ['Bob', 'Mary', 'Jane', 'Joe'];
 
+  service.association = { };
+
   return service;
 })
 
 
 .controller('AssociateCtrl', ['$scope', '$state', 'datastub', '$log', function($scope, $state, datastub, $log) {
-  $scope.association = { };
+  $scope.association = datastub.association;
   $scope.types = datastub.employeeTypes;
   $scope.employees = datastub.employees;
+  $scope.type = "";
 
-  $scope.setPersonType = function(){
-    var nextState = "";
-    switch ($scope.association.type)
-    {
-      case "Jacobs Employee":
-      nextState = "associate.employee"
-      break;
-      case "Subcontractor":
-      nextState = "associate.subcontractor";
-      break;
-      case "Client":
-      nextState = "associate.client";
-      break;
-      case "Visitor":
-      nextState = "associate.visitor";
-      break;
-      default:
-      nextState = "associate.type";
-      break;
-    }
+  $scope.isTypeDefined = function() {
+    return $scope.association.hasOwnProperty('type') && $scope.association.type != '';
+  };
 
-    console.log("new state: " + nextState);
-    $state.go(nextState);
+  $scope.validateType = function() {
+      if ($scope.isTypeDefined()) {
+        $state.go('associate.person');
+      }
+
+      else {
+        var myEl = angular.element( document.querySelector( '#div1' ) );
+        myEl.addClass('has-error');
+      }
   };
 
   $scope.submit = function() {
-
+    $state.go('welcome');
   };
 }]);

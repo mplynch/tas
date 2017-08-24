@@ -1,0 +1,77 @@
+<div ng-show="association.type == 'Jacobs Employee'">
+  <h4>Which employee is being assigned a tag?</h4>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <select ng-model="association.name" class="form-control" id="employee_name" required>
+          <option ng-repeat="employee in employees | orderBy:'text'" value="{{employee}}">{{employee}}</option>
+        </select>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+  </div>
+</div>
+
+<div ng-show="association.type == 'Client'">
+  <h4>Which client personnel is being assigned a tag?</h4>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <select ng-model="association.name" class="form-control" id="client_Name" required>
+          <option ng-repeat="employee in employees | orderBy:'text'" value="{{employee}}">{{employee}}</option>
+        </select>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+  </div>
+</div>
+
+<div ng-show="association.type == 'Visitor'">
+  <h4>Please enter the name of the visitor (optional).</h4>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <input type="text" class="form-control" id="visitor_name" placeholder="Name" ng-model="association.name">
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+  </div>
+</div>
+
+<div ng-show="association.type == 'Subcontractor'">
+  <h4>Please select the a company and person or add new ones.</h4>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <input type="text" class="form-control" id="subcontractor_name" placeholder="Name" ng-model="association.name">
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+  </div>
+</div>
+
+<div ng-show="!isTypeDefined()">
+  <div class="alert alert-danger" role="alert">
+    <p>An unexpected error occurred.  Please contact JCE support.</p>
+  </div>
+
+  <a ui-sref="welcome">
+    <button class="btn btn-lg btn-danger" type="button">Start Over</button>
+  </a>
+</div>
+
+<div ng-show="isTypeDefined()">
+  <p>&nbsp;</p>
+  <p>
+    <a ui-sref="associate.type">
+      <button class="btn btn-lg btn-default" type="button">Back</button>
+    </a>
+    <a ui-sref="associate.scan">
+      <button class="btn btn-lg btn-primary" type="button">Next</button>
+    </a>
+  </p>
+</div>

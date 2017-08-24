@@ -1,5 +1,5 @@
 <h4>What type of person will be assigned this tag?</h4>
-<div class="container">
+<div class="container form-group has-error has-feedback">
   <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-4">
@@ -12,7 +12,5 @@
 </div>
 <p>&nbsp;</p>
 <p>
-  <a ng-click="setPersonType()">
-    <button class="btn btn-lg btn-primary" type="button" ng-disabled="$invalid">Next</button>
-  </a>
+  <button class="btn btn-lg btn-primary" type="button" ng-click="validateType()">Next</button>
 </p>
