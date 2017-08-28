@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var OpenBrowserPlugin = require('open-browser-webpack-plugin');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
   context: __dirname + '/app',
@@ -20,9 +21,13 @@ module.exports = {
     },
     module: {
       loaders: [
+        // {
+        //   test: /\.css$/,
+        //   loader: 'style-loader!css-loader'
+        // },
         {
-          test: /\.css$/,
-          loader: 'style-loader!css-loader'
+            test: /\.css$/,
+            loader: ExtractTextPlugin.extract("css-loader", "postcss-loader")
         },
         {
           test: /\.woff$/,
@@ -62,6 +67,7 @@ module.exports = {
         $: 'jquery',
         jquery: 'jquery'
       }),
-      new OpenBrowserPlugin({ url: 'http://localhost:8080' })
+      new OpenBrowserPlugin({ url: 'http://localhost:8080' }),
+      new ExtractTextPlugin("app.css")
     ]
   };
