@@ -1,14 +1,14 @@
 <h4>What type of person will be assigned this tag?</h4>
 <div class="container form-group has-feedback" id="person_type">
   <div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
+    <div class="col-md-3 col-xs-2"></div>
+    <div class="col-md-6 col-xs-8">
       <select name="type" ng-model="personType" class="form-control" ng-change="validateType()" required>
         <option ng-repeat="type in types | orderBy:'text'" value="{{type}}">{{type}}</option>
       </select>
       <!-- <div id="typeHelpBlock" class="help-block" ng-show="!isTypeValid">You must select a person type!</div> -->
     </div>
-    <div class="col-md-4"></div>
+    <div class="col-md-3 col-xs-2"></div>
   </div>
 </div>
 <p>&nbsp;</p>

@@ -1,18 +1,16 @@
 <h4>Please scan the barcode of the tag being assigned.</h4>
 <div class="container">
   <div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
+    <div class="col-md-3 col-xs-2"></div>
+    <div class="col-md-6 col-xs-8">
       <img class="img-responsive center-block" src="/img/iTAG100.jpg">
       <input type="text" class="form-control" id="macAddress" ng-model="macAddress" focus="true" placeholder="Barcode" required>
     </div>
-    <div class="col-md-4"></div>
+    <div class="col-md-3 col-xs-2"></div>
   </div>
 </div>
 <p>&nbsp;</p>
 <p>
-  <a ui-sref="associate.person">
-    <button class="btn btn-lg btn-default" type="button">Back</button>
-  </a>
+  <button class="btn btn-lg btn-default" type="button" ng-click="previous()">Back</button>
   <button class="btn btn-lg btn-primary" type="button" ng-click="next()" ng-disabled="associateForm.$invalid">Next</button>
 </p>

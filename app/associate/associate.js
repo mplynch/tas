@@ -41,29 +41,50 @@ angular.module('myApp.associate', ['ui.router'])
   });
 }])
 
-// .directive('focus', function($timeout) {
-//   return {
-//     scope : {
-//       trigger : '@focus'
-//     },
-//     link : function(scope, element) {
-//       scope.$watch('trigger', function(value) {
-//         if (value === "true") {
-//           $timeout(function() {
-//             element[0].focus();
-//           });
-//         }
-//       });
-//     }
-//   };
-// })
-
 .factory('SubscribeService', function() {
   var service = {};
 
   service.employeeTypes = ['Jacobs Employee', 'Subcontractor', 'Visitor', 'Client'];
 
-  service.employees = ['Bob', 'Mary', 'Jane', 'Joe'];
+  service.employees = [
+    {
+      "JCE_PID": 1,
+      "PersonnelRole": "Craft",
+      "FirstName": "Franklin",
+      "MiddleName": "Delano",
+      "LastName": "Roosevelt",
+      "HireDate": "2013-09-05T00:00:00",
+      "LocalJacobsBadgeID": "1111",
+      "CRCode_FunctionCode": "YYYY",
+      "EmployeeNumber": "01234567",
+      "OraclePartyID": "1234567",
+      "HRJobTitle": "CARPENTER 03",
+      "Department": "0000 GENERAL",
+      "Shift": "1",
+      "Skill": "CARPENTER",
+      "Class": "CRAFT FOREMAN",
+      "CrewCode": "ASDF",
+      "Status": "Y",
+      "JacobsStartDate": "2017-05-04T00:00:00",
+      "LocationStartDate": "2013-09-05T00:00:00",
+      "DateLastChange": "2017-08-01T00:00:00",
+      "Company": "Jacobs"
+    },
+    {
+      "JCE_PID": 3,
+      "PersonnelRole": "Staff",
+      "FirstName": "John",
+      "MiddleName": "Fitzgerald",
+      "LastName": "Kennedy",
+      "HireDate": "2007-10-04T00:00:00",
+      "CRCode_FunctionCode": "1234",
+      "EmployeeNumber": "0987654321",
+      "OraclePartyID": "987654321",
+      "HRJobTitle": "CLERK 06",
+      "Department": "0000 GENERAL",
+      "JacobsStartDate": "2014-11-24T00:00:00"
+    }
+  ];
 
   service.association = { };
 
@@ -138,7 +159,7 @@ angular.module('myApp.associate', ['ui.router'])
     }
 
     else if ($state.includes("associate.scan")) {
-      SubscribeService.association.macAddress = $scope.macAddress;
+      SubscribeService.association.MacAddress = $scope.macAddress;
       $state.go('associate.finish');
     }
   };
