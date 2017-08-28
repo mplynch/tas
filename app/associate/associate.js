@@ -67,37 +67,108 @@ angular.module('myApp.associate', ['ui.router'])
 
   service.association = { };
 
+  service.submit = function(successCallback, errorCallback) {
+    successCallback();
+    //$http.post('/someUrl', service.association, config).then(successCallback, errorCallback);
+  };
+
   return service;
 })
 
 
 .controller('AssociateCtrl', ['$scope', '$state', 'datastub', '$log', function($scope, $state, datastub, $log) {
+  // Get data persisted through the association service
   $scope.association = datastub.association;
   $scope.types = datastub.employeeTypes;
   $scope.employees = datastub.employees;
-  $scope.type = "";
-  $scope.isTypeValid = true;
 
-  $scope.isTypeDefined = function() {
-    return $scope.association.hasOwnProperty('type') && $scope.association.type != '';
+  // Variables used for validation before copying to service state
+  $scope.personType = '';
+  $scope.macAddress = '';
+  $scope.employee = { name: '' };
+  $scope.client = { name: '' };
+  $scope.visitor = { name: '' };
+  $scope.subcontractor = { name: '', company: '' };
+
+  $scope.isTypeValid = false;
+  $scope.isPersonValid = false;
+
+
+
+  // Reset functions for cleaning up state variables
+
+  $scope.reset = function() {
+    $scope.resetType();
+  }
+
+  $scope.resetType = function() {
+    $scope.personType = "";
+    $scope.isTypeValid = true;
+  }
+
+
+
+  // Navigation functions
+
+  $scope.next = function() {
+    if ($state.includes('associate.type')) {
+      datastub.association.type = $scope.personType;
+      $state.go('associate.person');
+    }
+
+    else if ($state.includes("associate.person")) {
+      if (datastub.association.type == "Jacobs Employee") {
+        datastub.association.name = $scope.employee.name;
+      }
+
+      else if (datastub.association.type == "Subcontractor") {
+        datastub.association.name = $scope.subcontractor.name;
+        datastub.association.company = $scope.subcontractor.company;
+      }
+
+      else if (datastub.association.type == "Visitor") {
+        datastub.association.name = $scope.visitor.name;
+      }
+
+      else if (datastub.association.type == "Client") {
+        datastub.association.name = $scope.client.name;
+      }
+
+      $state.go('associate.scan');
+    }
+
+    else if ($state.includes("associate.scan")) {
+      datastub.association.macAddress = $scope.macAddress;
+      $state.go('associate.finish');
+    }
   };
 
-  $scope.validateType = function() {
-      if ($scope.isTypeDefined()) {
-        $state.go('associate.person');
+  $scope.previous = function() {
+    if ($state.includes("associate.person")) {
+      $state.go('associate.type');
+    }
 
-        $scope.isTypeValid = true;
-      }
+    else if ($state.includes("associate.scan")) {
+      $state.go('associate.person');
+    }
 
-      else {
-        console.log('Validation error!');
-        var myEl = angular.element( document.querySelector( '#person_type' ) );
-        myEl.addClass('has-error');
-        $scope.isTypeValid = false;
-      }
+    else if ($state.includes("associate.finish")) {
+      $state.go('associate.scan');
+    }
   };
 
   $scope.submit = function() {
-    $state.go('welcome');
+    datastub.submit(
+      // Success callback
+      function() {
+        // TODO: Add some kind of notification.  Maybe the index page needs an alert div?
+        $scope.reset();
+        $state.go('welcome');
+      },
+
+      function() { // Error callback
+        // TODO: Fill in error handling for submitting association
+      }
+    );
   };
 }]);

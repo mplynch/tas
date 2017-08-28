@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-md-4"></div>
       <div class="col-md-4">
-        <select ng-model="association.name" class="form-control" id="employee_name" required>
+        <select ng-model="employee.name" class="form-control" name="employeeName" ng-required="association.type == 'Jacobs Employee'">
           <option ng-repeat="employee in employees | orderBy:'text'" value="{{employee}}">{{employee}}</option>
         </select>
       </div>
@@ -19,7 +19,7 @@
     <div class="row">
       <div class="col-md-4"></div>
       <div class="col-md-4">
-        <select ng-model="association.name" class="form-control" id="client_Name" required>
+        <select ng-model="client.name" class="form-control" name="clientName" ng-required="association.type == 'Client'">
           <option ng-repeat="employee in employees | orderBy:'text'" value="{{employee}}">{{employee}}</option>
         </select>
       </div>
@@ -34,7 +34,7 @@
     <div class="row">
       <div class="col-md-4"></div>
       <div class="col-md-4">
-        <input type="text" class="form-control" id="visitor_name" placeholder="Name" ng-model="association.name">
+        <input type="text" class="form-control" id="visitor_name" placeholder="Name" ng-model="visitor.name">
       </div>
       <div class="col-md-4"></div>
     </div>
@@ -47,31 +47,24 @@
     <div class="row">
       <div class="col-md-4"></div>
       <div class="col-md-4">
-        <input type="text" class="form-control" id="subcontractor_name" placeholder="Name" ng-model="association.name">
+        <input type="text" class="form-control" id="subcontractor_company" placeholder="Company" ng-model="subcontractor.company" ng-required="association.type == 'Subcontractor'">
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <input type="text" class="form-control" id="subcontractor_name" placeholder="Name" ng-model="subcontractor.name" ng-required="association.type == 'Subcontractor'">
       </div>
       <div class="col-md-4"></div>
     </div>
   </div>
 </div>
 
-<div ng-show="!isTypeDefined()">
-  <div class="alert alert-danger" role="alert">
-    <p>An unexpected error occurred.  Please contact JCE support.</p>
-  </div>
-
-  <a ui-sref="welcome">
-    <button class="btn btn-lg btn-danger" type="button">Start Over</button>
-  </a>
-</div>
-
-<div ng-show="isTypeDefined()">
+<div>
   <p>&nbsp;</p>
   <p>
-    <a ui-sref="associate.type">
-      <button class="btn btn-lg btn-default" type="button">Back</button>
-    </a>
-    <a ui-sref="associate.scan">
-      <button class="btn btn-lg btn-primary" type="button">Next</button>
-    </a>
+    <button class="btn btn-lg btn-default" type="button" ng-click="previous()">Previous</button>
+    <button class="btn btn-lg btn-primary" type="button" ng-click="next()" ng-disabled="associateForm.$invalid">Next</button>
   </p>
 </div>

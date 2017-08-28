@@ -3,15 +3,15 @@
   <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-4">
-      <select ng-model="association.type" class="form-control" required>
+      <select name="type" ng-model="personType" class="form-control" ng-change="validateType()" required>
         <option ng-repeat="type in types | orderBy:'text'" value="{{type}}">{{type}}</option>
       </select>
-      <div id="typeHelpBlock" class="help-block" ng-show="!isTypeValid">You must select a person type!</div>
+      <!-- <div id="typeHelpBlock" class="help-block" ng-show="!isTypeValid">You must select a person type!</div> -->
     </div>
     <div class="col-md-4"></div>
   </div>
 </div>
 <p>&nbsp;</p>
 <p>
-  <button class="btn btn-lg btn-primary" type="button" ng-click="validateType()">Next</button>
+  <button class="btn btn-lg btn-primary" type="button" ng-click="next()" ng-disabled="associateForm.$invalid">Next</button>
 </p>
