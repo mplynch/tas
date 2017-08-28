@@ -1,7 +1,19 @@
 <div class="jumbotron text-center">
-  <h1>Unassociate a tag...</h1>
-  <p>Please scan the barcode of the tag you'd like to unassociate.</p>
-  <p>
-
-  </p>
+  <h4>Please scan the barcode of the tag being unassigned.</h4>
+  <form name="unassociateForm" novalidate>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <img class="img-responsive center-block" src="/img/iTAG100.jpg">
+          <input type="text" class="form-control" id="macAddress" ng-model="macAddress" focus="true" placeholder="Barcode" required>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+    </div>
+    <p>&nbsp;</p>
+    <p>
+      <button class="btn btn-lg btn-primary" type="button" ng-click="submit()" ng-disabled="unassociateForm.$invalid">Submit</button>
+    </p>
+  </form>
 </div>

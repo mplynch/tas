@@ -3,6 +3,7 @@
 /************** Import modules for WebPack to work its magic. *****************/
 
 require('./associate/associate.js');
+require('./focus/focus.js');
 require('./reports/reports.js');
 require('./unassociate/unassociate.js');
 require('./welcome/welcome.js');
@@ -21,6 +22,7 @@ angular.module('myApp', [
   'ui.router',
   'myApp.welcome',
   'myApp.associate',
+  'myApp.focus',
   'myApp.unassociate',
   'myApp.reports'
 ]).

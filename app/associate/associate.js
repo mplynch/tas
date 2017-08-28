@@ -41,24 +41,24 @@ angular.module('myApp.associate', ['ui.router'])
   });
 }])
 
-.directive('focus', function($timeout) {
-  return {
-    scope : {
-      trigger : '@focus'
-    },
-    link : function(scope, element) {
-      scope.$watch('trigger', function(value) {
-        if (value === "true") {
-          $timeout(function() {
-            element[0].focus();
-          });
-        }
-      });
-    }
-  };
-})
+// .directive('focus', function($timeout) {
+//   return {
+//     scope : {
+//       trigger : '@focus'
+//     },
+//     link : function(scope, element) {
+//       scope.$watch('trigger', function(value) {
+//         if (value === "true") {
+//           $timeout(function() {
+//             element[0].focus();
+//           });
+//         }
+//       });
+//     }
+//   };
+// })
 
-.factory('datastub', function() {
+.factory('SubscribeService', function() {
   var service = {};
 
   service.employeeTypes = ['Jacobs Employee', 'Subcontractor', 'Visitor', 'Client'];
@@ -76,11 +76,11 @@ angular.module('myApp.associate', ['ui.router'])
 })
 
 
-.controller('AssociateCtrl', ['$scope', '$state', 'datastub', '$log', function($scope, $state, datastub, $log) {
+.controller('AssociateCtrl', ['$scope', '$state', 'SubscribeService', '$log', function($scope, $state, SubscribeService, $log) {
   // Get data persisted through the association service
-  $scope.association = datastub.association;
-  $scope.types = datastub.employeeTypes;
-  $scope.employees = datastub.employees;
+  $scope.association = SubscribeService.association;
+  $scope.types = SubscribeService.employeeTypes;
+  $scope.employees = SubscribeService.employees;
 
   // Variables used for validation before copying to service state
   $scope.personType = '';
@@ -112,33 +112,33 @@ angular.module('myApp.associate', ['ui.router'])
 
   $scope.next = function() {
     if ($state.includes('associate.type')) {
-      datastub.association.type = $scope.personType;
+      SubscribeService.association.type = $scope.personType;
       $state.go('associate.person');
     }
 
     else if ($state.includes("associate.person")) {
-      if (datastub.association.type == "Jacobs Employee") {
-        datastub.association.name = $scope.employee.name;
+      if (SubscribeService.association.type == "Jacobs Employee") {
+        SubscribeService.association.name = $scope.employee.name;
       }
 
-      else if (datastub.association.type == "Subcontractor") {
-        datastub.association.name = $scope.subcontractor.name;
-        datastub.association.company = $scope.subcontractor.company;
+      else if (SubscribeService.association.type == "Subcontractor") {
+        SubscribeService.association.name = $scope.subcontractor.name;
+        SubscribeService.association.company = $scope.subcontractor.company;
       }
 
-      else if (datastub.association.type == "Visitor") {
-        datastub.association.name = $scope.visitor.name;
+      else if (SubscribeService.association.type == "Visitor") {
+        SubscribeService.association.name = $scope.visitor.name;
       }
 
-      else if (datastub.association.type == "Client") {
-        datastub.association.name = $scope.client.name;
+      else if (SubscribeService.association.type == "Client") {
+        SubscribeService.association.name = $scope.client.name;
       }
 
       $state.go('associate.scan');
     }
 
     else if ($state.includes("associate.scan")) {
-      datastub.association.macAddress = $scope.macAddress;
+      SubscribeService.association.macAddress = $scope.macAddress;
       $state.go('associate.finish');
     }
   };
@@ -158,7 +158,7 @@ angular.module('myApp.associate', ['ui.router'])
   };
 
   $scope.submit = function() {
-    datastub.submit(
+    SubscribeService.submit(
       // Success callback
       function() {
         // TODO: Add some kind of notification.  Maybe the index page needs an alert div?
