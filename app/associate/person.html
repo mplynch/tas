@@ -1,25 +1,23 @@
-<div ng-show="association.type == 'Jacobs Employee'">
+<div ng-show="personType == 'Jacobs Employee'">
   <h4>Which employee is being assigned a tag?</h4>
   <div class="container">
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <select ng-model="employee" class="form-control" name="employeeName" ng-required="association.type == 'Jacobs Employee'">
-          <option ng-repeat="employee in employees | orderBy:'text'" value="{{employee.JCE_PID}}">{{employee.LastName}}, {{employee.FirstName}} {{employee.MiddleName}}</option>
-        </select>
+        <select ng-model="person" class="form-control" name="employeeName" ng-options="employee as employee.LastName + ', ' + employee.FirstName for employee in employees" ng-required="personType == 'Jacobs Employee'" ></select>
       </div>
     <div class="col-md-3 col-xs-2"></div>
     </div>
   </div>
 </div>
 
-<div ng-show="association.type == 'Client'">
+<div ng-show="personType == 'Client'">
   <h4>Which client personnel is being assigned a tag?</h4>
   <div class="container">
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <select ng-model="client.name" class="form-control" name="clientName" ng-required="association.type == 'Client'">
+        <select ng-model="client.name" class="form-control" name="clientName" ng-required="personType == 'Client'">
           <option ng-repeat="employee in employees | orderBy:'text'" value="{{employee}}">{{employee}}</option>
         </select>
       </div>
@@ -28,7 +26,7 @@
   </div>
 </div>
 
-<div ng-show="association.type == 'Visitor'">
+<div ng-show="personType == 'Visitor'">
   <h4>Please enter the name of the visitor (optional).</h4>
   <div class="container">
     <div class="row">
@@ -41,27 +39,31 @@
   </div>
 </div>
 
-<div ng-show="association.type == 'Subcontractor'">
+<div ng-show="personType == 'Subcontractor'">
   <h4>Please select the a company and person or add new ones.</h4>
   <div class="container">
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <input type="text" class="form-control" id="subcontractor_company" placeholder="Company" ng-model="subcontractor.company" ng-required="association.type == 'Subcontractor'">
+        <input type="text" class="form-control" id="subcontractor_company" placeholder="Company" ng-model="subcontractor.company" ng-required="personType == 'Subcontractor'">
       </div>
     <div class="col-md-3 col-xs-2"></div>
     </div>
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <input type="text" class="form-control" id="subcontractor_name" placeholder="Name" ng-model="subcontractor.name" ng-required="association.type == 'Subcontractor'">
+        <input type="text" class="form-control" id="subcontractor_name" placeholder="Name" ng-model="subcontractor.name" ng-required="personType == 'Subcontractor'">
       </div>
     <div class="col-md-3 col-xs-2"></div>
     </div>
   </div>
 </div>
 
-<div>
+<div ng-show="personType == ''">
+  <p class="alert alert-danger">An error occurred!  No person type is defined!</p>
+</div>
+
+<div ng-show="personType != ''">
   <p>&nbsp;</p>
   <p>
     <button class="btn btn-lg btn-default" type="button" ng-click="previous()">Back</button>

@@ -15,7 +15,7 @@ angular.module('myApp.unassociate', ['ui.router'])
 .factory('UnsubscribeService', function() {
   var service = {};
 
-  service.employeeTypes = ['Jacobs Employee', 'Subcontractor', 'Visitor', 'Client'];
+  service.personTypes = ['Jacobs Employee', 'Subcontractor', 'Visitor', 'Client'];
 
   service.employees = ['Bob', 'Mary', 'Jane', 'Joe'];
 

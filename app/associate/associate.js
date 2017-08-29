@@ -16,8 +16,7 @@ angular.module('myApp.associate', ['ui.router'])
   $stateProvider.state('associate', {
     abstract: true,
     url: '/',
-    template: mainTemplate,
-    controller: 'AssociateCtrl'
+    template: mainTemplate
   })
 
   .state('associate.type', {
@@ -41,12 +40,11 @@ angular.module('myApp.associate', ['ui.router'])
   });
 }])
 
-.factory('SubscribeService', function() {
+.factory('SubscribeService', ['$http', function($http) {
   var service = {};
+    service.association = { };
 
-  service.employeeTypes = ['Jacobs Employee', 'Subcontractor', 'Visitor', 'Client'];
-
-  service.employees = [
+    service.employees = [
     {
       "JCE_PID": 1,
       "PersonnelRole": "Craft",
@@ -86,46 +84,76 @@ angular.module('myApp.associate', ['ui.router'])
     }
   ];
 
-  service.association = { };
+  service.macAddress = '';
+
+  service.personType = '';
+
+  service.personTypes = ['Jacobs Employee', 'Subcontractor', 'Visitor', 'Client'];
+
+  service.selectedPerson = { };
 
   service.submit = function(successCallback, errorCallback) {
-    successCallback();
+    var response = null;
+
+    // TODO: Convert personType to one of the folloiwng: Client, Craft, Staff, Sub, Visitor
+
+    switch (service.personType) {
+      case "Jacobs Employee":
+        service.association.JCE_PID = service.selectedPerson.JCE_PID;
+        service.association.macAddress = service.macAddress;
+        break;
+
+      case "Client":
+        break;
+
+      case "Visitor":
+        break;
+
+      case "Subcontractor":
+        break;
+
+      default:
+        errorCallback("Invalid personType: " + service.personType);
+      }
+
+      $http.post('/tads/api/v1/Associate', service.association).then(
+        function(response) {
+          successCallback(response);
+        },
+        function (response) {
+          errorCallback(response);
+        });
     //$http.post('/someUrl', service.association, config).then(successCallback, errorCallback);
   };
 
   return service;
-})
+}])
 
 
 .controller('AssociateCtrl', ['$scope', '$state', 'SubscribeService', '$log', function($scope, $state, SubscribeService, $log) {
   // Get data persisted through the association service
   $scope.association = SubscribeService.association;
-  $scope.types = SubscribeService.employeeTypes;
+  $scope.types = SubscribeService.personTypes;
   $scope.employees = SubscribeService.employees;
+  $scope.personType = SubscribeService.personType;
+  $scope.selectedPerson = SubscribeService.selectedPerson;
+
+  $scope.submitError = '';
 
   // Variables used for validation before copying to service state
-  $scope.personType = '';
   $scope.macAddress = '';
-  $scope.employee = { name: '' };
-  $scope.client = { name: '' };
+  $scope.client = { name: '', phone: '' };
   $scope.visitor = { name: '' };
   $scope.subcontractor = { name: '', company: '' };
-
-  $scope.isTypeValid = false;
-  $scope.isPersonValid = false;
 
 
 
   // Reset functions for cleaning up state variables
 
   $scope.reset = function() {
-    $scope.resetType();
+
   }
 
-  $scope.resetType = function() {
-    $scope.personType = "";
-    $scope.isTypeValid = true;
-  }
 
 
 
@@ -133,25 +161,25 @@ angular.module('myApp.associate', ['ui.router'])
 
   $scope.next = function() {
     if ($state.includes('associate.type')) {
-      SubscribeService.association.type = $scope.personType;
+      SubscribeService.personType = $scope.personType;
       $state.go('associate.person');
     }
 
     else if ($state.includes("associate.person")) {
-      if (SubscribeService.association.type == "Jacobs Employee") {
-        SubscribeService.association.name = $scope.employee.name;
+      if (SubscribeService.personType == "Jacobs Employee") {
+        SubscribeService.selectedPerson = $scope.person;
       }
 
-      else if (SubscribeService.association.type == "Subcontractor") {
+      else if (SubscribeService.personType == "Subcontractor") {
         SubscribeService.association.name = $scope.subcontractor.name;
         SubscribeService.association.company = $scope.subcontractor.company;
       }
 
-      else if (SubscribeService.association.type == "Visitor") {
+      else if (SubscribeService.personType == "Visitor") {
         SubscribeService.association.name = $scope.visitor.name;
       }
 
-      else if (SubscribeService.association.type == "Client") {
+      else if (SubscribeService.personType == "Client") {
         SubscribeService.association.name = $scope.client.name;
       }
 
@@ -159,7 +187,7 @@ angular.module('myApp.associate', ['ui.router'])
     }
 
     else if ($state.includes("associate.scan")) {
-      SubscribeService.association.MacAddress = $scope.macAddress;
+      SubscribeService.macAddress = $scope.macAddress;
       $state.go('associate.finish');
     }
   };
@@ -181,13 +209,16 @@ angular.module('myApp.associate', ['ui.router'])
   $scope.submit = function() {
     SubscribeService.submit(
       // Success callback
-      function() {
+      function(response) {
         // TODO: Add some kind of notification.  Maybe the index page needs an alert div?
+        console.log('HTTP response: ' + response.status);
         $scope.reset();
         $state.go('welcome');
       },
 
-      function() { // Error callback
+      function(response) { // Error callback
+        $scope.submitError = "An error occurred while associating this tag: " + response.status + " - " + response.statusText;
+        $scope.response = response;
         // TODO: Fill in error handling for submitting association
       }
     );
