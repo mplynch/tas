@@ -1,19 +1,29 @@
-<div class="jumbotron text-center">
-  <h4>Please scan the barcode of the tag being unassigned.</h4>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="text-center">Unassociate a tag...</h3>
+  </div>
   <form name="unassociateForm" novalidate>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-          <img class="img-responsive center-block" src="/img/iTAG100.jpg">
+    <div id="form-view" class="text-center panel-body">
+      <h4>Please scan the barcode of the tag being unassigned.</h4>
+      <div class="col-md-12 col-xs-12">
+        <div class="alert alert-danger" ng-show="submitError != ''">{{submitError}}</div>
+      </div>
+      <div class="col-md-3 col-xs-2"></div>
+      <div class="col-md-6 col-xs-8">
+        <img class="img-responsive center-block" src="/img/iTAG100.jpg">
+        <div class="form-group">
           <input type="text" class="form-control" id="macAddress" ng-model="macAddress" focus="true" placeholder="Barcode" required>
         </div>
-        <div class="col-md-4"></div>
       </div>
+      <div class="col-md-3  col-xs-2"></div>
+
+      <div class="col-md-12 col-xs-12">
+        <p>&nbsp;</p>
+        <p>
+          <button class="btn btn-lg btn-success" type="button" ng-click="unassociate()" ng-disabled="unassociateForm.$invalid">Unassociate</button>
+        </p>
+      </div>
+
     </div>
-    <p>&nbsp;</p>
-    <p>
-      <button class="btn btn-lg btn-primary" type="button" ng-click="submit()" ng-disabled="unassociateForm.$invalid">Submit</button>
-    </p>
   </form>
 </div>
