@@ -42,9 +42,9 @@ angular.module('myApp.associate', ['ui.router'])
 
 .factory('SubscribeService', ['$http', function($http) {
   var service = {};
-    service.association = { };
+  service.association = { };
 
-    service.employees = [
+  service.personnel = [
     {
       "JCE_PID": 1,
       "PersonnelRole": "Craft",
@@ -80,11 +80,62 @@ angular.module('myApp.associate', ['ui.router'])
       "OraclePartyID": "987654321",
       "HRJobTitle": "CLERK 06",
       "Department": "0000 GENERAL",
-      "JacobsStartDate": "2014-11-24T00:00:00"
+      "JacobsStartDate": "2014-11-24T00:00:00",
+      "Company": "Jacobs"
+    },
+    {
+      "JCE_PID": 2,
+      "PersonnelRole": "Craft",
+      "FirstName": "John",
+      "MiddleName": "H.",
+      "LastName": "Doe",
+      "HireDate": "2013-09-05T00:00:00",
+      "LocalJacobsBadgeID": "1111",
+      "CRCode_FunctionCode": "YYYY",
+      "EmployeeNumber": "01234567",
+      "OraclePartyID": "1234567",
+      "HRJobTitle": "CARPENTER 03",
+      "Department": "0000 GENERAL",
+      "Shift": "1",
+      "Skill": "CARPENTER",
+      "Class": "CRAFT FOREMAN",
+      "CrewCode": "ASDF",
+      "Status": "Y",
+      "JacobsStartDate": "2017-05-04T00:00:00",
+      "LocationStartDate": "2013-09-05T00:00:00",
+      "DateLastChange": "2017-08-01T00:00:00",
+      "Company": "INEOS"
+    },
+    {
+      "JCE_PID": 4,
+      "PersonnelRole": "Staff",
+      "FirstName": "Jane",
+      "MiddleName": "T.",
+      "LastName": "Doe",
+      "HireDate": "2007-10-04T00:00:00",
+      "CRCode_FunctionCode": "1234",
+      "EmployeeNumber": "0987654321",
+      "OraclePartyID": "987654321",
+      "HRJobTitle": "CLERK 06",
+      "Department": "0000 GENERAL",
+      "JacobsStartDate": "2014-11-24T00:00:00",
+      "Company": "INEOS"
     }
   ];
 
-  service.macAddress = '';
+  service.error = '';
+
+  $http.get('/tads/api/v1/Personnel').then(
+    function(response) {
+      console.log('Successfully retrieved personnel.');
+      service.personnel = response.data;
+    },
+    function (response) {
+      service.error = 'Failed to get personnel!';
+      console.error('Failed to retrieved personnel!');
+    });
+
+  service.macaddress = '';
 
   service.personType = '';
 
@@ -99,128 +150,114 @@ angular.module('myApp.associate', ['ui.router'])
 
     switch (service.personType) {
       case "Jacobs Employee":
-        service.association.JCE_PID = service.selectedPerson.JCE_PID;
-        service.association.macAddress = service.macAddress;
-        break;
+      service.association.jce_pid = service.selectedPerson.JCE_PID;
+      service.association.mac_address = service.macaddress;
+      break;
 
       case "Client":
-        break;
+      break;
 
       case "Visitor":
-        break;
+      break;
 
       case "Subcontractor":
-        break;
+      break;
 
       default:
-        errorCallback("Invalid personType: " + service.personType);
+      errorCallback("Invalid personType: " + service.personType);
+    }
+
+    $http.post('/tads/api/v1/Associate', service.association, {
+      headers: {
+        'Content-Type': 'application/json'
       }
-
-      $http.post('/tads/api/v1/Associate', service.association).then(
-        function(response) {
-          successCallback(response);
-        },
-        function (response) {
-          errorCallback(response);
-        });
-    //$http.post('/someUrl', service.association, config).then(successCallback, errorCallback);
-  };
-
-  return service;
-}])
-
-
-.controller('AssociateCtrl', ['$scope', '$state', 'SubscribeService', '$log', function($scope, $state, SubscribeService, $log) {
-  // Get data persisted through the association service
-  $scope.association = SubscribeService.association;
-  $scope.types = SubscribeService.personTypes;
-  $scope.employees = SubscribeService.employees;
-  $scope.personType = SubscribeService.personType;
-  $scope.selectedPerson = SubscribeService.selectedPerson;
-
-  $scope.submitError = '';
-
-  // Variables used for validation before copying to service state
-  $scope.macAddress = '';
-  $scope.client = { name: '', phone: '' };
-  $scope.visitor = { name: '' };
-  $scope.subcontractor = { name: '', company: '' };
-
-
-
-  // Reset functions for cleaning up state variables
-
-  $scope.reset = function() {
-
-  }
-
-
-
-
-  // Navigation functions
-
-  $scope.next = function() {
-    if ($state.includes('associate.type')) {
-      SubscribeService.personType = $scope.personType;
-      $state.go('associate.person');
-    }
-
-    else if ($state.includes("associate.person")) {
-      if (SubscribeService.personType == "Jacobs Employee") {
-        SubscribeService.selectedPerson = $scope.person;
-      }
-
-      else if (SubscribeService.personType == "Subcontractor") {
-        SubscribeService.association.name = $scope.subcontractor.name;
-        SubscribeService.association.company = $scope.subcontractor.company;
-      }
-
-      else if (SubscribeService.personType == "Visitor") {
-        SubscribeService.association.name = $scope.visitor.name;
-      }
-
-      else if (SubscribeService.personType == "Client") {
-        SubscribeService.association.name = $scope.client.name;
-      }
-
-      $state.go('associate.scan');
-    }
-
-    else if ($state.includes("associate.scan")) {
-      SubscribeService.macAddress = $scope.macAddress;
-      $state.go('associate.finish');
-    }
-  };
-
-  $scope.previous = function() {
-    if ($state.includes("associate.person")) {
-      $state.go('associate.type');
-    }
-
-    else if ($state.includes("associate.scan")) {
-      $state.go('associate.person');
-    }
-
-    else if ($state.includes("associate.finish")) {
-      $state.go('associate.scan');
-    }
-  };
-
-  $scope.submit = function() {
-    SubscribeService.submit(
-      // Success callback
+    }).then(
       function(response) {
-        // TODO: Add some kind of notification.  Maybe the index page needs an alert div?
-        console.log('HTTP response: ' + response.status);
-        $scope.reset();
-        $state.go('welcome');
+        successCallback(response);
       },
+      function (response) {
+        errorCallback(response);
+      });
+      //$http.post('/someUrl', service.association, config).then(successCallback, errorCallback);
+    };
 
-      function(response) { // Error callback
-        $scope.submitError = "An error occurred while associating this tag: " + response.status + " - " + response.statusText;
-        $scope.response = response;
-        // TODO: Fill in error handling for submitting association
+    return service;
+  }])
+
+
+  .controller('AssociateCtrl', ['$scope', '$state', 'SubscribeService', '$log', function($scope, $state, SubscribeService, $log) {
+    // Get data persisted through the association service
+    $scope.association = SubscribeService.association;
+    $scope.types = SubscribeService.personTypes;
+    $scope.personnel = SubscribeService.personnel;
+    $scope.personType = SubscribeService.personType;
+    $scope.selectedPerson = SubscribeService.selectedPerson;
+    $scope.macaddress = SubscribeService.macaddress;
+
+    $scope.submitError = '';
+
+    // Variables used for validation before copying to service state
+    $scope.visitor = { name: '' };
+    $scope.subcontractor = { name: '', company: '' };
+
+    $scope.getFullNameString = function(person)  {
+      var fullName = person.LastName + ", " + person.FirstName;
+
+      if (person.MiddleName != '')
+      fullName = fullName + ' ' + person.MiddleName;
+
+      return fullName;
+    };
+
+
+    // Navigation functions
+
+    $scope.next = function() {
+      if ($state.includes('associate.type')) {
+        SubscribeService.personType = $scope.personType;
+        $state.go('associate.person');
       }
-    );
-  };
-}]);
+
+      else if ($state.includes("associate.person")) {
+        SubscribeService.selectedPerson = $scope.person;
+
+        $state.go('associate.scan');
+      }
+
+      else if ($state.includes("associate.scan")) {
+        SubscribeService.macaddress = $scope.macaddress;
+        $state.go('associate.finish');
+      }
+    };
+
+    $scope.previous = function() {
+      if ($state.includes("associate.person")) {
+        $state.go('associate.type');
+      }
+
+      else if ($state.includes("associate.scan")) {
+        $state.go('associate.person');
+      }
+
+      else if ($state.includes("associate.finish")) {
+        $state.go('associate.scan');
+      }
+    };
+
+    $scope.submit = function() {
+      SubscribeService.submit(
+        // Success callback
+        function(response) {
+          // TODO: Add some kind of notification.  Maybe the index page needs an alert div?
+          console.log('HTTP response: ' + response.status);
+          $state.go('welcome');
+        },
+
+        function(response) { // Error callback
+          $scope.submitError = "An error occurred while associating this tag: " + response.status + " - " + response.statusText;
+          $scope.response = response;
+          // TODO: Fill in error handling for submitting association
+        }
+      );
+    };
+  }]);

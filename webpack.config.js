@@ -5,13 +5,14 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
   context: __dirname + '/app',
   entry: {
-    app: './app.js',
+    app: ['./app.js'],
     vendor: [
       '@uirouter/angularjs',
       'angular',
       'angular-animate',
       'angular-bootstrap',
       'angular-loader',
+      'angular-filter',
       'bootstrap',
       'jquery']
     },

@@ -15,10 +15,16 @@ angular.module('myApp.unassociate', ['ui.router'])
 .factory('UnsubscribeService', ['$http', function($http) {
   var service = {};
 
-  service.macAddress = '';
+  service.macaddress = '';
 
-  service.submit = function(macAddress, successCallback, errorCallback) {
-    $http.post('/tads/api/v1/Unassociate', service.association).then(
+  service.submit = function(macaddress, successCallback, errorCallback) {
+    var body = { 'mac_address' : macaddress };
+
+    $http.post('/tads/api/v1/Unassociate', body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(
       function(response) {
         successCallback(response);
       },
@@ -31,11 +37,11 @@ angular.module('myApp.unassociate', ['ui.router'])
   }])
 
   .controller('UnassociateCtrl', ['$scope', '$state', 'UnsubscribeService', function($scope, $state, UnsubscribeService) {
-    $scope.macAddress = '';
+    $scope.macaddress = '';
     $scope.submitError = '';
 
       $scope.unassociate = function() {
-        UnsubscribeService.submit($scope.macAddress,
+        UnsubscribeService.submit($scope.macaddress,
           // Success callback
           function(response) {
             // TODO: Add some kind of notification.  Maybe the index page needs an alert div?

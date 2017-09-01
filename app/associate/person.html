@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <select ng-model="person" class="form-control" name="employeeName" ng-options="employee as employee.LastName + ', ' + employee.FirstName for employee in employees" ng-required="personType == 'Jacobs Employee'" ></select>
+        <select ng-model="person" class="form-control" name="employeeName" ng-options="employee as employee.LastName + ', ' + employee.FirstName + ' ' + employee.MiddleName for employee in personnel | orderBy: 'LastName' | filterBy: ['Company']: 'Jacobs'" ng-required="personType == 'Jacobs Employee'" ></select>
       </div>
     <div class="col-md-3 col-xs-2"></div>
     </div>
@@ -17,11 +17,11 @@
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <select ng-model="client.name" class="form-control" name="clientName" ng-required="personType == 'Client'">
-          <option ng-repeat="employee in employees | orderBy:'text'" value="{{employee}}">{{employee}}</option>
-        </select>
+        <select ng-model="person" class="form-control" name="clientName" ng-options="employee as employee.LastName + ', ' + employee.FirstName + ' ' + employee.MiddleName for employee in personnel | filterBy: ['Company']: 'INEOS'" ng-required="personType == 'Client'"></select>
       </div>
-    <div class="col-md-3 col-xs-2"></div>
+    <div class="col-md-3 col-xs-2 text-left">
+      <button class="btn btn-primary" type="button" ng-click="addNew()"><span class="glyphicon glyphicon-user"></span> Add</button>
+    </div>
     </div>
   </div>
 </div>
@@ -32,7 +32,8 @@
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <input type="text" class="form-control" id="visitor_name" placeholder="Name" ng-model="visitor.name">
+        <input type="text" class="form-control" id="visitor_name" placeholder="First Name" ng-model="person.FirstName" ng-required="personType == 'Visitor'">
+        <input type="text" class="form-control" id="visitor_name" placeholder="Last Name" ng-model="person.LastName" ng-required="personType == 'Visitor'">
       </div>
     <div class="col-md-3 col-xs-2"></div>
     </div>
@@ -45,7 +46,7 @@
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <input type="text" class="form-control" id="subcontractor_company" placeholder="Company" ng-model="subcontractor.company" ng-required="personType == 'Subcontractor'">
+        <input type="text" class="form-control" id="subcontractor_company" placeholder="Company" ng-model="person.Company" ng-required="personType == 'Subcontractor'">
       </div>
     <div class="col-md-3 col-xs-2"></div>
     </div>
@@ -54,7 +55,9 @@
       <div class="col-md-6 col-xs-8">
         <input type="text" class="form-control" id="subcontractor_name" placeholder="Name" ng-model="subcontractor.name" ng-required="personType == 'Subcontractor'">
       </div>
-    <div class="col-md-3 col-xs-2"></div>
+    <div class="col-md-3 col-xs-2 text-left">
+      <button class="btn btn-primary" type="button" ng-click="addNew()"><span class="glyphicon glyphicon-user"></span> Add</button>
+    </div>
     </div>
   </div>
 </div>

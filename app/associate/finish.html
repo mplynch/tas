@@ -3,51 +3,32 @@
 <div class="form-horizontal col-md-8 col-xs-8">
   <div class="alert alert-danger" ng-show="submitError != ''">{{submitError}}</div>
 
-  <div class="form-group" ng-show="personType == 'Jacobs Employee'">
+  <div class="form-group">
     <label for="employeeName" class="col-md-4 control-label">Name:</label>
     <div class="col-md-8">
-      <input type="text" class="form-control" id="employeeName" placeholder="Name" ng-model="association.name" readonly>
+      <input type="text" class="form-control" id="name" placeholder="Name" value="{{getFullNameString(selectedPerson)}}" readonly>
     </div>
-    <label for="macAddress" class="col-md-4 control-label">MAC Address:</label>
+    <label for="macaddress" class="col-md-4 control-label">MAC Address:</label>
     <div class="col-md-8">
-      <input type="text" class="form-control" id="macAddress" ng-model="association.macAddress" focus="true" placeholder="Barcode" readonly>
+      <input type="text" class="form-control" id="macaddress" value="{{macaddress}}" readonly>
     </div>
   </div>
 
   <div class="form-group" ng-show="personType == 'Client'">
-    <label for="clientName" class="col-md-4 control-label">Name:</label>
+    <label for="phone" class="col-md-4 control-label">Phone:</label>
     <div class="col-md-8">
-      <input type="text" class="form-control" id="clientName" placeholder="Name" ng-model="association.name" readonly>
-    </div>
-    <label for="macAddress" class="col-md-4 control-label">MAC Address:</label>
-    <div class="col-md-8">
-      <input type="text" class="form-control" id="macAddress" ng-model="association.macAddress" focus="true" placeholder="Barcode" readonly>
+      <input type="text" class="form-control" id="phone" value="{{selectedPerson.Phone}}" readonly>
     </div>
   </div>
 
   <div class="form-group" ng-show="personType == 'Visitor'">
-    <label for="clientName" class="col-md-4 control-label">Name:</label>
-    <div class="col-md-8">
-      <input type="text" class="form-control" id="clientName" placeholder="Name" ng-model="association.name" readonly>
-    </div>
-    <label for="macAddress" class="col-md-4 control-label">MAC Address:</label>
-    <div class="col-md-8">
-      <input type="text" class="form-control" id="macAddress" ng-model="association.macAddress" focus="true" placeholder="Barcode" readonly>
-    </div>
+
   </div>
 
   <div class="form-group" ng-show="personType == 'Subcontractor'">
     <label for="subcontractorCompany" class="col-md-4 control-label">Company:</label>
     <div class="col-md-8">
-      <input type="text" class="form-control" id="subcontractorCompany" placeholder="Company" ng-model="association.company" ng-required="personType == 'Subcontractor'" readonly>
-    </div>
-    <label for="subcontractorName" class="col-md-4 control-label">Name:</label>
-    <div class="col-md-8">
-      <input type="text" class="form-control" id="subcontractorName" placeholder="Name" ng-model="association.name" ng-required="personType == 'Subcontractor'" readonly>
-    </div>
-    <label for="macAddress" class="col-md-4 control-label">MAC Address:</label>
-    <div class="col-md-8">
-      <input type="text" class="form-control" id="macAddress" ng-model="association.macAddress" focus="true" placeholder="Barcode" readonly>
+      <input type="text" class="form-control" id="subcontractorCompany" placeholder="Company" value="{{selectedPerson.Company}}" readonly>
     </div>
   </div>
 
