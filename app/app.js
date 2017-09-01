@@ -20,6 +20,7 @@ require('bootswatch/paper/bootstrap.min.css');
 angular.module('myApp', [
   'ngAnimate',
   'ui.router',
+  'ui.bootstrap',
   'angular.filter',
   'myApp.welcome',
   'myApp.associate',
