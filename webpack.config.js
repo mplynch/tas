@@ -10,7 +10,7 @@ module.exports = {
       '@uirouter/angularjs',
       'angular',
       'angular-animate',
-      'angular-bootstrap',
+      'angular-ui-bootstrap',
       'angular-loader',
       'angular-filter',
       'bootstrap',

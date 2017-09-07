@@ -9,8 +9,9 @@ var typeTemplate = require('./type.html');
 var scanTemplate = require('./scan.html');
 var finishTemplate = require('./finish.html');
 var personTemplate = require('./person.html');
+var personAddTemplate = require('./person.add.html');
 
-angular.module('myApp.associate', ['ui.router'])
+angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
 
 .config(['$stateProvider', function($stateProvider) {
   $stateProvider.state('associate', {
@@ -40,9 +41,19 @@ angular.module('myApp.associate', ['ui.router'])
   });
 }])
 
-.factory('SubscribeService', ['$http', function($http) {
+.factory('SubscribeService', ['$http', '$log', function($http, $log) {
   var service = {};
   service.association = { };
+
+  service.error = '';
+
+  service.macaddress = '';
+
+  service.personType = '';
+
+  service.personTypes = ['Jacobs Employee', 'Subcontractor', 'Visitor', 'Client'];
+
+  service.selectedPerson = { };
 
   service.personnel = [
     {
@@ -120,144 +131,214 @@ angular.module('myApp.associate', ['ui.router'])
       "Department": "0000 GENERAL",
       "JacobsStartDate": "2014-11-24T00:00:00",
       "Company": "INEOS"
+    },
+    {
+      "JCE_PID": 5,
+      "FirstName": "Bob",
+      "LastName": "Loblaw",
+      "Company": "Bob Loblaw's Law Blog"
+    },
+    {
+      "JCE_PID": 6,
+      "FirstName": "Rob",
+      "LastName": "Loblaw",
+      "Company": "Bob Loblaw's Law Blog"
+    },
+    {
+      "JCE_PID": 7,
+      "FirstName": "JoJo",
+      "LastName": "Josephson",
+      "Company": "JoJo's Jigs"
+    },
+    {
+      "JCE_PID": 8,
+      "FirstName": "Elon",
+      "LastName": "Musk",
+      "Company": "SpaceX"
     }
   ];
 
-  service.error = '';
-
-  $http.get('/tads/api/v1/Personnel').then(
-    function(response) {
-      console.log('Successfully retrieved personnel.');
-      service.personnel = response.data;
-    },
-    function (response) {
-      service.error = 'Failed to get personnel!';
-      console.error('Failed to retrieved personnel!');
-    });
-
-  service.macaddress = '';
-
-  service.personType = '';
-
-  service.personTypes = ['Jacobs Employee', 'Subcontractor', 'Visitor', 'Client'];
-
-  service.selectedPerson = { };
-
-  service.submit = function(successCallback, errorCallback) {
-    var response = null;
-
-    // TODO: Convert personType to one of the folloiwng: Client, Craft, Staff, Sub, Visitor
-
-    switch (service.personType) {
-      case "Jacobs Employee":
-      service.association.jce_pid = service.selectedPerson.JCE_PID;
-      service.association.mac_address = service.macaddress;
-      break;
-
-      case "Client":
-      break;
-
-      case "Visitor":
-      break;
-
-      case "Subcontractor":
-      break;
-
-      default:
-      errorCallback("Invalid personType: " + service.personType);
-    }
-
-    $http.post('/tads/api/v1/Associate', service.association, {
+  service.addPerson = function(person) {
+    $http.post('/tads/api/v1/Personnel', person, {
       headers: {
         'Content-Type': 'application/json'
       }
     }).then(
+      // Success callback
       function(response) {
-        successCallback(response);
+
       },
+      // Error callback
+      function(response){
+
+      }
+    )
+  };
+
+  // Initializes the personnel list by querying the TAS web service
+  service.getPersonnel = function() {
+    // TODO: Add HTML to show error and to prevent frontend from accepting user input if personnel aren't retrieved
+
+    $http.get('/tads/api/v1/Personnel').then(
+      // Success callback
+      function(response) {
+        console.log('Successfully retrieved personnel.');
+        service.personnel = response.data;
+      },
+      // Error callback
       function (response) {
-        errorCallback(response);
+        service.error = 'Failed to get personnel!';
+        console.error('Failed to retrieved personnel!');
       });
-      //$http.post('/someUrl', service.association, config).then(successCallback, errorCallback);
     };
 
-    return service;
-  }])
+    // Sends a POST to the web service to create a new tag association
+    service.submitAssociation = function(successCallback, errorCallback) {
+      var response = null;
 
+      // TODO: Convert personType to one of the folloiwng: Client, Craft, Staff, Sub, Visitor
 
-  .controller('AssociateCtrl', ['$scope', '$state', 'SubscribeService', '$log', function($scope, $state, SubscribeService, $log) {
-    // Get data persisted through the association service
-    $scope.association = SubscribeService.association;
-    $scope.types = SubscribeService.personTypes;
-    $scope.personnel = SubscribeService.personnel;
-    $scope.personType = SubscribeService.personType;
-    $scope.selectedPerson = SubscribeService.selectedPerson;
-    $scope.macaddress = SubscribeService.macaddress;
+      switch (service.personType) {
+        case "Jacobs Employee":
+        service.association.jce_pid = service.selectedPerson.JCE_PID;
+        service.association.mac_address = service.macaddress;
+        break;
 
-    $scope.submitError = '';
+        case "Client":
+        break;
 
-    // Variables used for validation before copying to service state
-    $scope.visitor = { name: '' };
-    $scope.subcontractor = { name: '', company: '' };
+        case "Visitor":
+        break;
 
-    $scope.getFullNameString = function(person)  {
-      var fullName = person.LastName + ", " + person.FirstName;
+        case "Subcontractor":
+        break;
 
-      if (person.MiddleName != '')
-      fullName = fullName + ' ' + person.MiddleName;
-
-      return fullName;
-    };
-
-
-    // Navigation functions
-
-    $scope.next = function() {
-      if ($state.includes('associate.type')) {
-        SubscribeService.personType = $scope.personType;
-        $state.go('associate.person');
+        default:
+        errorCallback("Invalid personType: " + service.personType);
       }
 
-      else if ($state.includes("associate.person")) {
-        SubscribeService.selectedPerson = $scope.person;
-
-        $state.go('associate.scan');
-      }
-
-      else if ($state.includes("associate.scan")) {
-        SubscribeService.macaddress = $scope.macaddress;
-        $state.go('associate.finish');
-      }
-    };
-
-    $scope.previous = function() {
-      if ($state.includes("associate.person")) {
-        $state.go('associate.type');
-      }
-
-      else if ($state.includes("associate.scan")) {
-        $state.go('associate.person');
-      }
-
-      else if ($state.includes("associate.finish")) {
-        $state.go('associate.scan');
-      }
-    };
-
-    $scope.submit = function() {
-      SubscribeService.submit(
-        // Success callback
-        function(response) {
-          // TODO: Add some kind of notification.  Maybe the index page needs an alert div?
-          console.log('HTTP response: ' + response.status);
-          $state.go('welcome');
-        },
-
-        function(response) { // Error callback
-          $scope.submitError = "An error occurred while associating this tag: " + response.status + " - " + response.statusText;
-          $scope.response = response;
-          // TODO: Fill in error handling for submitting association
+      $http.post('/tads/api/v1/Associate', service.association, {
+        headers: {
+          'Content-Type': 'application/json'
         }
-      );
-    };
-  }]);
+      }).then(
+        function(response) {
+          successCallback(response);
+        },
+        function (response) {
+          errorCallback(response);
+        });
+        //$http.post('/someUrl', service.association, config).then(successCallback, errorCallback);
+      };
+
+      // Initialize the personnel list.
+      service.getPersonnel();
+
+      return service;
+    }])
+
+
+    .controller('AssociateCtrl', ['$scope', '$state', 'SubscribeService', '$log', '$uibModal', function($scope, $state, SubscribeService, $log, $uibModal) {
+      // Get data persisted through the association service
+      $scope.association = SubscribeService.association;
+      $scope.types = SubscribeService.personTypes;
+      $scope.personnel = SubscribeService.personnel;
+      $scope.personType = SubscribeService.personType;
+      $scope.selectedPerson = SubscribeService.selectedPerson;
+      $scope.macaddress = SubscribeService.macaddress;
+
+      $scope.submitError = '';
+
+      // Variables used for validation before copying to service state
+      $scope.visitor = { name: '' };
+      $scope.subcontractor = { name: '', company: '' };
+
+      $scope.getFullNameString = function(person)  {
+        var fullName = person.LastName + ", " + person.FirstName;
+
+        if (person.MiddleName != '')
+        fullName = fullName + ' ' + person.MiddleName;
+
+        return fullName;
+      };
+
+
+      // Navigation functions
+
+      $scope.next = function() {
+        if ($state.includes('associate.type')) {
+          SubscribeService.personType = $scope.personType;
+          $state.go('associate.person');
+        }
+
+        else if ($state.includes("associate.person")) {
+          SubscribeService.selectedPerson = $scope.person;
+
+          $state.go('associate.scan');
+        }
+
+        else if ($state.includes("associate.scan")) {
+          SubscribeService.macaddress = $scope.macaddress;
+          $state.go('associate.finish');
+        }
+      };
+
+      $scope.previous = function() {
+        if ($state.includes("associate.person")) {
+          $state.go('associate.type');
+        }
+
+        else if ($state.includes("associate.scan")) {
+          $state.go('associate.person');
+        }
+
+        else if ($state.includes("associate.finish")) {
+          $state.go('associate.scan');
+        }
+      };
+
+      $scope.addPerson = function() {
+        var modalInstance = $uibModal.open({
+          animation: true,
+          template: personAddTemplate,
+          controller: 'AddPersonCtrl'
+        });
+
+        modalInstance.result.then(function () {
+          $log.info('New person added.');
+        }, function () {
+          $log.debug('Modal dismissed at: ' + new Date());
+        });
+      };
+
+      $scope.submit = function() {
+        SubscribeService.submitAssociation(
+          // Success callback
+          function(response) {
+            // TODO: Add some kind of notification.  Maybe the index page needs an alert div?
+            $log.debug('HTTP response: ' + response.status);
+            $state.go('welcome');
+          },
+
+          function(response) { // Error callback
+            $log.error("Tag association failed.  HTTP error " + response.status + " - " + response.statusText);
+            $scope.submitError = "An error occurred while associating this tag: " + response.status + " - " + response.statusText;
+            $scope.response = response;
+          }
+        );
+      };
+    }])
+
+    .controller('AddPersonCtrl', ['$scope', '$uibModalInstance', 'SubscribeService', '$log', function($scope, $uibModalInstance, SubscribeService, $log) {
+
+
+      $scope.ok = function () {
+        $log.debug('Modal dialog: User clicked OK.');
+        $uibModalInstance.close();
+      };
+
+      $scope.cancel = function () {
+        $log.debug('Modal dialog: User clicked Cancel.');
+        $uibModalInstance.dismiss('cancel');
+      };
+    }]);

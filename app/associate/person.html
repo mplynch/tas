@@ -1,12 +1,12 @@
-<div ng-show="personType == 'Jacobs Employee'">
-  <h4>Which employee is being assigned a tag?</h4>
+<div ng-show="personType == 'Jacobs person'">
+  <h4>Which person is being assigned a tag?</h4>
   <div class="container">
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <select ng-model="person" class="form-control" name="employeeName" ng-options="employee as employee.LastName + ', ' + employee.FirstName + ' ' + employee.MiddleName for employee in personnel | orderBy: 'LastName' | filterBy: ['Company']: 'Jacobs'" ng-required="personType == 'Jacobs Employee'" ></select>
+        <select ng-model="person" class="form-control" name="personName" ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName for person in personnel | orderBy: 'LastName' | filterBy: ['Company']: 'Jacobs'" ng-required="personType == 'Jacobs person'" ></select>
       </div>
-    <div class="col-md-3 col-xs-2"></div>
+      <div class="col-md-3 col-xs-2"></div>
     </div>
   </div>
 </div>
@@ -17,11 +17,11 @@
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <select ng-model="person" class="form-control" name="clientName" ng-options="employee as employee.LastName + ', ' + employee.FirstName + ' ' + employee.MiddleName for employee in personnel | filterBy: ['Company']: 'INEOS'" ng-required="personType == 'Client'"></select>
+        <select ng-model="person" class="form-control" name="clientName" ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName for person in personnel | filterBy: ['Company']: 'INEOS'" ng-required="personType == 'Client'"></select>
       </div>
-    <div class="col-md-3 col-xs-2 text-left">
-      <button class="btn btn-primary" type="button" ng-click="addNew()"><span class="glyphicon glyphicon-user"></span> Add</button>
-    </div>
+      <div class="col-md-3 col-xs-2 text-left">
+        <button class="btn btn-primary" type="button" ng-click="addPerson()"><span class="glyphicon glyphicon-user"></span> Add</button>
+      </div>
     </div>
   </div>
 </div>
@@ -35,7 +35,7 @@
         <input type="text" class="form-control" id="visitor_name" placeholder="First Name" ng-model="person.FirstName" ng-required="personType == 'Visitor'">
         <input type="text" class="form-control" id="visitor_name" placeholder="Last Name" ng-model="person.LastName" ng-required="personType == 'Visitor'">
       </div>
-    <div class="col-md-3 col-xs-2"></div>
+      <div class="col-md-3 col-xs-2"></div>
     </div>
   </div>
 </div>
@@ -46,18 +46,18 @@
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <input type="text" class="form-control" id="subcontractor_company" placeholder="Company" ng-model="person.Company" ng-required="personType == 'Subcontractor'">
+        <select ng-model="company" class="form-control" name="company" ng-options="person as person.Company for person in personnel | omit: 'Company === \'Jacobs\'' | omit: 'Company === \'INEOS\'' | unique: 'Company' | orderBy: 'Company'" ng-required="personType == 'Subcontractor'"></select>
       </div>
-    <div class="col-md-3 col-xs-2"></div>
+      <div class="col-md-3 col-xs-2"></div>
     </div>
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <input type="text" class="form-control" id="subcontractor_name" placeholder="Name" ng-model="subcontractor.name" ng-required="personType == 'Subcontractor'">
+        <select ng-model="person" class="form-control" name="subcontractorName" ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName for person in personnel | searchField: 'Company' | filter: subcontractorCompany" ng-required="personType == 'Subcontractor'"></select>
       </div>
-    <div class="col-md-3 col-xs-2 text-left">
-      <button class="btn btn-primary" type="button" ng-click="addNew()"><span class="glyphicon glyphicon-user"></span> Add</button>
-    </div>
+      <div class="col-md-3 col-xs-2 text-left">
+        <button class="btn btn-primary" type="button" ng-click="addPerson()"><span class="glyphicon glyphicon-user"></span> Add</button>
+      </div>
     </div>
   </div>
 </div>

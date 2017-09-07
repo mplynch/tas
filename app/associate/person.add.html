@@ -1,0 +1,19 @@
+<div class="modal-demo">
+  <form name="associateForm" ng-submit="processForm()" novalidate>
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-title">Add Personnel</h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+
+      <input type="text" class="form-control" id="firstName" ng-model="firstName" placeholder="First Name (required)" required>
+      <input type="text" class="form-control" id="middleName" ng-model="middleName" placeholder="Middle Name">
+      <input type="text" class="form-control" id="lastName" ng-model="lastName" placeholder="Last Name  (required)" required>
+      <input type="text" class="form-control" id="phone" ng-model="phone" placeholder="Phone Number">
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>
