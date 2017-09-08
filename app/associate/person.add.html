@@ -1,18 +1,36 @@
 <div class="modal-demo">
-  <form name="associateForm" ng-submit="processForm()" novalidate>
+  <form name="addPersonForm" novalidate>
     <div class="modal-header">
       <h3 class="modal-title" id="modal-title">Add Personnel</h3>
     </div>
-    <div class="modal-body" id="modal-body">
+    <div class="modal-body form-horizontal" id="modal-body">
 
-      <input type="text" class="form-control" id="firstName" ng-model="firstName" placeholder="First Name (required)" required>
-      <input type="text" class="form-control" id="middleName" ng-model="middleName" placeholder="Middle Name">
-      <input type="text" class="form-control" id="lastName" ng-model="lastName" placeholder="Last Name  (required)" required>
-      <input type="text" class="form-control" id="phone" ng-model="phone" placeholder="Phone Number">
+      <div class="form-group">
+        <label for="firstName" class="col-md-4 control-label">First Name:</label>
+        <div class="col-md-8">
+          <input type="text" class="form-control" id="firstName" ng-model="person.firstname" required>
+        </div>
+        <label for="middleName" class="col-md-4 control-label">Middle Name (optional):</label>
+        <div class="col-md-8">
+          <input type="text" class="form-control" id="middleName" ng-model="person.middlemame">
+        </div>
+        <label for="lastName" class="col-md-4 control-label">Last Name:</label>
+        <div class="col-md-8">
+          <input type="text" class="form-control" id="lastName" ng-model="person.lastname" required>
+        </div>
+        <label for="company" class="col-md-4 control-label" ng-show="personType == 'Subcontractor'">Company:</label>
+        <div class="col-md-8" ng-show="personType == 'Subcontractor'">
+          <input type="text" class="form-control" id="company" ng-model="person.company" ng-required="personType == 'Subcontractor'">
+        </div>
+        <label for="phone" class="col-md-4 control-label">Phone (optional):</label>
+        <div class="col-md-8">
+          <input type="text" class="form-control" id="phone" ng-model="person.phone">
+        </div>
+      </div>
 
     </div>
     <div class="modal-footer">
-      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+      <button class="btn btn-primary" type="submit" ng-click="ok()" ng-disabled="addPersonForm.$invalid">OK</button>
       <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
     </div>
   </form>

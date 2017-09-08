@@ -1,7 +1,7 @@
 'use strict';
 
-/* The following require statements are needed for WebPack to work it's magic
-* each view template must be 'required' or it will be left out of the packed
+/* The following require statements are needed for WebPack to work it's magic.
+* Each view template must be 'required' or it will be left out of the packed
 * min.js file.  It's kind of irritating to have to do this, but I couldn't
 * find a better solution.  Can you? */
 var mainTemplate = require('./associate.html');
@@ -13,6 +13,7 @@ var personAddTemplate = require('./person.add.html');
 
 angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
 
+// Define states for the wizard (Angular UI Router states)
 .config(['$stateProvider', function($stateProvider) {
   $stateProvider.state('associate', {
     abstract: true,
@@ -41,6 +42,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
   });
 }])
 
+// Service for exchanging data with tag association REST API backend
 .factory('SubscribeService', ['$http', '$log', function($http, $log) {
   var service = {};
   service.association = { };
@@ -55,6 +57,8 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
 
   service.selectedPerson = { };
 
+  // Hard-coded personnel for development without REST API backend running
+  // TOOD: Remove this temporary hard-coded data
   service.personnel = [
     {
       "JCE_PID": 1,
@@ -158,19 +162,43 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
     }
   ];
 
-  service.addPerson = function(person) {
-    $http.post('/tads/api/v1/Personnel', person, {
+  // Sends a POST request to add the specified person to the database
+  service.addPerson = function(person, successCallback, errorCallback) {
+    var url = '/tads/api/v1/';
+
+    // TODO: Convert personType to one of the folloiwng: Client, Craft, Staff, Sub, Visitor
+
+    // Get the appropriate endpoint.  Jacobs personnel can not be added
+    switch (service.personType) {
+      case "Client":
+        url += 'client';
+        break;
+
+      case "Visitor":
+        url += 'visitor';
+        break;
+
+      case "Subcontractor":
+        url += 'subcontractor';
+        break;
+
+      default:
+        errorCallback("Unable to add personnel of type '" + service.personType + "'.");
+    }
+
+    $http.post(url, person, {
       headers: {
         'Content-Type': 'application/json'
       }
     }).then(
       // Success callback
       function(response) {
-
+        successCallback(response);
       },
       // Error callback
       function(response){
-
+        errorCallback("An error occurred while submitting new personnel.  " +
+        "HTTP Error " + response.status + " - " + response.statusText);
       }
     )
   };
@@ -182,13 +210,13 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
     $http.get('/tads/api/v1/Personnel').then(
       // Success callback
       function(response) {
-        console.log('Successfully retrieved personnel.');
+        $log.debug('Successfully retrieved personnel.');
         service.personnel = response.data;
       },
       // Error callback
       function (response) {
         service.error = 'Failed to get personnel!';
-        console.error('Failed to retrieved personnel!');
+        $log.error('Failed to retrieved personnel!');
       });
     };
 
@@ -196,26 +224,8 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
     service.submitAssociation = function(successCallback, errorCallback) {
       var response = null;
 
-      // TODO: Convert personType to one of the folloiwng: Client, Craft, Staff, Sub, Visitor
-
-      switch (service.personType) {
-        case "Jacobs Employee":
-        service.association.jce_pid = service.selectedPerson.JCE_PID;
-        service.association.mac_address = service.macaddress;
-        break;
-
-        case "Client":
-        break;
-
-        case "Visitor":
-        break;
-
-        case "Subcontractor":
-        break;
-
-        default:
-        errorCallback("Invalid personType: " + service.personType);
-      }
+      service.association.jce_pid = service.selectedPerson.JCE_PID;
+      service.association.mac_address = service.macaddress;
 
       $http.post('/tads/api/v1/Associate', service.association, {
         headers: {
@@ -237,7 +247,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
       return service;
     }])
 
-
+    // Controller for the tag association wizard
     .controller('AssociateCtrl', ['$scope', '$state', 'SubscribeService', '$log', '$uibModal', function($scope, $state, SubscribeService, $log, $uibModal) {
       // Get data persisted through the association service
       $scope.association = SubscribeService.association;
@@ -247,12 +257,14 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
       $scope.selectedPerson = SubscribeService.selectedPerson;
       $scope.macaddress = SubscribeService.macaddress;
 
+      // Initialize an error string to an empty string
       $scope.submitError = '';
 
       // Variables used for validation before copying to service state
       $scope.visitor = { name: '' };
       $scope.subcontractor = { name: '', company: '' };
 
+      // Concatenates a person's name.  Helper function for the finish state
       $scope.getFullNameString = function(person)  {
         var fullName = person.LastName + ", " + person.FirstName;
 
@@ -262,9 +274,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
         return fullName;
       };
 
-
-      // Navigation functions
-
+      // Handles moving to the next state in the wizard
       $scope.next = function() {
         if ($state.includes('associate.type')) {
           SubscribeService.personType = $scope.personType;
@@ -283,6 +293,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
         }
       };
 
+      // Handles moving to the previous state in the wizard
       $scope.previous = function() {
         if ($state.includes("associate.person")) {
           $state.go('associate.type');
@@ -297,48 +308,87 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
         }
       };
 
+      /* Launches a modal window controlled by AddPersonCtrl and updates the
+      personnel list if a new person is added */
       $scope.addPerson = function() {
+        // Open a modal dialog for adding personnel
         var modalInstance = $uibModal.open({
-          animation: true,
-          template: personAddTemplate,
-          controller: 'AddPersonCtrl'
+          animation: true,    // make the modal pretty
+          backdrop: 'static', // prevent backdrop clicks from closing modal
+          controller: 'AddPersonCtrl',
+          template: personAddTemplate // template comes from a 'require'
         });
 
-        modalInstance.result.then(function () {
-          $log.info('New person added.');
-        }, function () {
-          $log.debug('Modal dismissed at: ' + new Date());
-        });
-      };
+        // Wait for the modal dialog's result
+        modalInstance.result.then(
+          // OK callback
+          function () {
+            // Update the personnel to get the new person's JCE_PID
+            SubscribeService.getPersonnel();
 
-      $scope.submit = function() {
-        SubscribeService.submitAssociation(
-          // Success callback
-          function(response) {
-            // TODO: Add some kind of notification.  Maybe the index page needs an alert div?
-            $log.debug('HTTP response: ' + response.status);
-            $state.go('welcome');
+            // Update the list of personnel
+            $scope.personnel = SubscribeService.personnel;
+
+            $log.info('New person added.');
           },
 
-          function(response) { // Error callback
-            $log.error("Tag association failed.  HTTP error " + response.status + " - " + response.statusText);
-            $scope.submitError = "An error occurred while associating this tag: " + response.status + " - " + response.statusText;
-            $scope.response = response;
-          }
-        );
-      };
-    }])
+          // Cancel callback
+          function () {
+            $log.debug('Modal dismissed at: ' + new Date());
+          });
+        };
 
-    .controller('AddPersonCtrl', ['$scope', '$uibModalInstance', 'SubscribeService', '$log', function($scope, $uibModalInstance, SubscribeService, $log) {
+        // Submits an association, completing the process
+        $scope.submit = function() {
+          SubscribeService.submitAssociation(
+            // Success callback
+            function(response) {
+              // TODO: Add some kind of notification.  Maybe the index page needs an alert div?
+              $log.debug('HTTP response: ' + response.status);
 
+              // Go back to the welcome state
+              $state.go('welcome');
+            },
 
-      $scope.ok = function () {
-        $log.debug('Modal dialog: User clicked OK.');
-        $uibModalInstance.close();
-      };
+            function(response) { // Error callback
+              // Log and display an error message
+              $log.error("Tag association failed.  HTTP error " + response.status + " - " + response.statusText);
+              $scope.submitError = "An error occurred while associating this tag: " + response.status + " - " + response.statusText;
+              $scope.response = response;
+            }
+          );
+        };
+      }])
 
-      $scope.cancel = function () {
-        $log.debug('Modal dialog: User clicked Cancel.');
-        $uibModalInstance.dismiss('cancel');
-      };
-    }]);
+      // Controller for the Add Person modal used to add new Visitors, Clients, and Subcontractors
+      .controller('AddPersonCtrl', ['$scope', '$uibModalInstance', 'SubscribeService', '$log', function($scope, $uibModalInstance, SubscribeService, $log) {
+        $scope.person = { };
+        $scope.personType = SubscribeService.personType;
+
+        // Handles a click on the OK button. Validation done in the view
+        $scope.ok = function () {
+          $log.debug('Add person dialog: User clicked OK.');
+
+          // Add the new person
+          SubscribeService.addPerson($scope.person,
+            // Success callback
+            function(response) {
+              // TODO: response contains the new person??, so set selectd person
+
+              // Close the modal
+              $uibModalInstance.close();
+            },
+
+            // Error callback
+            function(response) {
+              // TODO: Show an error.  Response contains an error message
+            }
+          )
+        };
+
+        // Handles a click on the Cancel button
+        $scope.cancel = function () {
+          $log.debug('Add person dialog: User clicked Cancel.');
+          $uibModalInstance.dismiss('cancel');
+        };
+      }]);

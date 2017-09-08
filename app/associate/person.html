@@ -1,10 +1,10 @@
-<div ng-show="personType == 'Jacobs person'">
+<div ng-show="personType == 'Jacobs Employee'">
   <h4>Which person is being assigned a tag?</h4>
   <div class="container">
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <select ng-model="person" class="form-control" name="personName" ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName for person in personnel | orderBy: 'LastName' | filterBy: ['Company']: 'Jacobs'" ng-required="personType == 'Jacobs person'" ></select>
+        <select ng-model="person" class="form-control" name="personName" ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName for person in personnel | orderBy: 'LastName' | filterBy: ['Company']: 'Jacobs'" ng-required="personType == 'Jacobs Employee'" ></select>
       </div>
       <div class="col-md-3 col-xs-2"></div>
     </div>
@@ -46,14 +46,7 @@
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <select ng-model="company" class="form-control" name="company" ng-options="person as person.Company for person in personnel | omit: 'Company === \'Jacobs\'' | omit: 'Company === \'INEOS\'' | unique: 'Company' | orderBy: 'Company'" ng-required="personType == 'Subcontractor'"></select>
-      </div>
-      <div class="col-md-3 col-xs-2"></div>
-    </div>
-    <div class="row">
-      <div class="col-md-3 col-xs-2"></div>
-      <div class="col-md-6 col-xs-8">
-        <select ng-model="person" class="form-control" name="subcontractorName" ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName for person in personnel | searchField: 'Company' | filter: subcontractorCompany" ng-required="personType == 'Subcontractor'"></select>
+        <select ng-model="person" class="form-control" name="subcontractor" ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName group by person.Company for person in personnel | omit: 'Company === \'Jacobs\'' | omit: 'Company === \'INEOS\'' | omit: '!Company'" ng-required="personType == 'Subcontractor'"></select>
       </div>
       <div class="col-md-3 col-xs-2 text-left">
         <button class="btn btn-primary" type="button" ng-click="addPerson()"><span class="glyphicon glyphicon-user"></span> Add</button>
