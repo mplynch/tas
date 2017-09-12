@@ -49,6 +49,7 @@
 	to 		{ -webkit-transform: translateX(0); }
 }
 
+/* Hide undesired underline below link in webkit browsers (i.e. Chrome). */
 a:-webkit-any-link{
 text-decoration:none !important;
 }

@@ -11,6 +11,7 @@ module.exports = {
       'angular',
       'angular-animate',
       'angular-ui-bootstrap',
+      'angular-ui-grid',
       'angular-loader',
       'angular-filter',
       'bootstrap',

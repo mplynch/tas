@@ -1,7 +1,14 @@
-<div class="jumbotron text-center">
-  <h1>Reports...</h1>
-  <p>Reports go here...</p>
-  <p>
-
-  </p>
+<div class="panel panel-default">
+  <!-- <div class="panel-heading">
+    <h3 class="text-center">Reports</h3>
+  </div> -->
+  <ul class="nav nav-tabs">
+    <li role="presentation" ui-sref-active="active"><a ui-sref="reports.all">All Tags</a></li>
+    <li role="presentation" ui-sref-active="active"><a ui-sref="reports.associated">Associated Tags</a></li>
+    <li role="presentation" ui-sref-active="active"><a ui-sref="reports.unassociated">Unassociated Tags</a></li>
+    <li role="presentation" ui-sref-active="active"><a ui-sref="reports.lost">Lost Tags</a></li>
+  </ul>
+  <div class="text-center panel-body" ui-view>
+    <h4>Please select from the reports listed above.</h4>
+  </div>
 </div>

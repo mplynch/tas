@@ -268,7 +268,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
       $scope.getFullNameString = function(person)  {
         var fullName = person.LastName + ", " + person.FirstName;
 
-        if (person.MiddleName != '')
+        if (person.MiddleName && person.MiddleName != '')
         fullName = fullName + ' ' + person.MiddleName;
 
         return fullName;

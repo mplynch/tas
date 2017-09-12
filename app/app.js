@@ -11,6 +11,7 @@ require('./welcome/welcome.js');
 require("./app.css");
 //require('bootstrap/dist/css/bootstrap.min.css');
 require('bootswatch/paper/bootstrap.min.css');
+require('angular-ui-grid/ui-grid.css');
 /******************************************************************************/
 
 
@@ -21,6 +22,7 @@ angular.module('myApp', [
   'ngAnimate',
   'ui.router',
   'ui.bootstrap',
+  'ui.grid',
   'angular.filter',
   'myApp.welcome',
   'myApp.associate',
