@@ -7,6 +7,9 @@
       <h4>Please scan the barcode of the tag being unassigned.</h4>
       <div class="col-md-12 col-xs-12">
         <div class="alert alert-danger" ng-show="submitError != ''">{{submitError}}</div>
+        <div class="alert alert-success" role="alert" ng-show="unassociationSuccess">
+          Association successful!  <a ng-click="reset()">Click here to unassociate another tag.</a>
+        </div>
       </div>
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
@@ -20,7 +23,7 @@
       <div class="col-md-12 col-xs-12">
         <p>&nbsp;</p>
         <p>
-          <button class="btn btn-lg btn-success" type="button" ng-click="unassociate()" ng-disabled="unassociateForm.$invalid">Unassociate</button>
+          <button class="btn btn-lg btn-success" type="button" ng-click="unassociate()" ng-disabled="unassociateForm.$invalid || unassociationSuccess">Unassociate</button>
         </p>
       </div>
 

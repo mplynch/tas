@@ -2,6 +2,9 @@
 <div class="col-md-2 col-xs-2"></div>
 <div class="form-horizontal col-md-8 col-xs-8">
   <div class="alert alert-danger" ng-show="submitError != ''">{{submitError}}</div>
+  <div class="alert alert-success" role="alert" ng-show="associationSuccess">
+    Association successful!  <a ui-sref="associate.type">Click here to associate another tag.</a>
+  </div>
 
   <div class="form-group">
     <label for="employeeName" class="col-md-4 control-label">Name:</label>
@@ -38,7 +41,7 @@
 <div class="col-md-12 col-xs-12">
   <p>&nbsp;</p>
   <p>
-    <button class="btn btn-lg btn-default" type="button" ng-click="previous()">Back</button>
-    <button class="btn btn-lg btn-success" type="button" ng-click="submit()">Submit</button>
+    <button class="btn btn-lg btn-default" type="button" ng-click="previous()" ng-disabled="associationSuccess">Back</button>
+    <button class="btn btn-lg btn-success" type="button" ng-click="submit()" ng-disabled="associationSuccess">Submit</button>
   </p>
 </div>

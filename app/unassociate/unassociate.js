@@ -30,30 +30,34 @@ angular.module('myApp.unassociate', ['ui.router'])
       },
       function (response) {
         errorCallback(response);
-      });
-    };
+      }
+    );
+  };
 
-    return service;
-  }])
+  return service;
+}])
 
-  .controller('UnassociateCtrl', ['$scope', '$state', 'UnsubscribeService', function($scope, $state, UnsubscribeService) {
-    $scope.macaddress = '';
-    $scope.submitError = '';
+.controller('UnassociateCtrl', ['$scope', '$state', 'UnsubscribeService', function($scope, $state, UnsubscribeService) {
+  $scope.macaddress = '';
+  $scope.submitError = '';
 
-      $scope.unassociate = function() {
-        UnsubscribeService.submit($scope.macaddress,
-          // Success callback
-          function(response) {
-            // TODO: Add some kind of notification.  Maybe the index page needs an alert div?
-            console.log('HTTP response: ' + response.status);
-            $state.go('welcome');
-          },
+  $scope.reset = function() {
+    $state.reload();
+  };
 
-          function(response) { // Error callback
-            $scope.submitError = "An error occurred while associating this tag: " + response.status + " - " + response.statusText;
-            $scope.response = response;
-            // TODO: Fill in error handling for submitting association
-          }
-        )
-      };
-    }]);
+  $scope.unassociate = function() {
+    UnsubscribeService.submit($scope.macaddress,
+      // Success callback
+      function(response) {
+        console.log('HTTP response: ' + response.status);
+        //$state.go('welcome');
+        $scope.unassociationSuccess = true;
+      },
+
+      function(response) { // Error callback
+        $scope.submitError = "An error occurred while unassociating this tag: " + response.status + " - " + response.statusText;
+        $scope.response = response;
+       }
+    )
+  };
+}]);

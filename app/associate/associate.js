@@ -45,141 +45,147 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
 // Service for exchanging data with tag association REST API backend
 .factory('SubscribeService', ['$http', '$log', function($http, $log) {
   var service = {};
-  service.association = { };
-
-  service.error = '';
-
-  service.macaddress = '';
-
-  service.personType = '';
 
   service.personTypes = ['Jacobs Employee', 'Subcontractor', 'Visitor', 'Client'];
 
-  service.selectedPerson = { };
+  service.personnel = [];
 
-  // Hard-coded personnel for development without REST API backend running
-  // TOOD: Remove this temporary hard-coded data
-  service.personnel = [
-    {
-      "JCE_PID": 1,
-      "PersonnelRole": "Craft",
-      "FirstName": "Franklin",
-      "MiddleName": "Delano",
-      "LastName": "Roosevelt",
-      "HireDate": "2013-09-05T00:00:00",
-      "LocalJacobsBadgeID": "1111",
-      "CRCode_FunctionCode": "YYYY",
-      "EmployeeNumber": "01234567",
-      "OraclePartyID": "1234567",
-      "HRJobTitle": "CARPENTER 03",
-      "Department": "0000 GENERAL",
-      "Shift": "1",
-      "Skill": "CARPENTER",
-      "Class": "CRAFT FOREMAN",
-      "CrewCode": "ASDF",
-      "Status": "Y",
-      "JacobsStartDate": "2017-05-04T00:00:00",
-      "LocationStartDate": "2013-09-05T00:00:00",
-      "DateLastChange": "2017-08-01T00:00:00",
-      "Company": "Jacobs"
-    },
-    {
-      "JCE_PID": 3,
-      "PersonnelRole": "Staff",
-      "FirstName": "John",
-      "MiddleName": "Fitzgerald",
-      "LastName": "Kennedy",
-      "HireDate": "2007-10-04T00:00:00",
-      "CRCode_FunctionCode": "1234",
-      "EmployeeNumber": "0987654321",
-      "OraclePartyID": "987654321",
-      "HRJobTitle": "CLERK 06",
-      "Department": "0000 GENERAL",
-      "JacobsStartDate": "2014-11-24T00:00:00",
-      "Company": "Jacobs"
-    },
-    {
-      "JCE_PID": 2,
-      "PersonnelRole": "Craft",
-      "FirstName": "John",
-      "MiddleName": "H.",
-      "LastName": "Doe",
-      "HireDate": "2013-09-05T00:00:00",
-      "LocalJacobsBadgeID": "1111",
-      "CRCode_FunctionCode": "YYYY",
-      "EmployeeNumber": "01234567",
-      "OraclePartyID": "1234567",
-      "HRJobTitle": "CARPENTER 03",
-      "Department": "0000 GENERAL",
-      "Shift": "1",
-      "Skill": "CARPENTER",
-      "Class": "CRAFT FOREMAN",
-      "CrewCode": "ASDF",
-      "Status": "Y",
-      "JacobsStartDate": "2017-05-04T00:00:00",
-      "LocationStartDate": "2013-09-05T00:00:00",
-      "DateLastChange": "2017-08-01T00:00:00",
-      "Company": "INEOS"
-    },
-    {
-      "JCE_PID": 4,
-      "PersonnelRole": "Staff",
-      "FirstName": "Jane",
-      "MiddleName": "T.",
-      "LastName": "Doe",
-      "HireDate": "2007-10-04T00:00:00",
-      "CRCode_FunctionCode": "1234",
-      "EmployeeNumber": "0987654321",
-      "OraclePartyID": "987654321",
-      "HRJobTitle": "CLERK 06",
-      "Department": "0000 GENERAL",
-      "JacobsStartDate": "2014-11-24T00:00:00",
-      "Company": "INEOS"
-    },
-    {
-      "JCE_PID": 5,
-      "FirstName": "Bob",
-      "LastName": "Loblaw",
-      "Company": "Bob Loblaw's Law Blog"
-    },
-    {
-      "JCE_PID": 6,
-      "FirstName": "Rob",
-      "LastName": "Loblaw",
-      "Company": "Bob Loblaw's Law Blog"
-    },
-    {
-      "JCE_PID": 7,
-      "FirstName": "JoJo",
-      "LastName": "Josephson",
-      "Company": "JoJo's Jigs"
-    },
-    {
-      "JCE_PID": 8,
-      "FirstName": "Elon",
-      "LastName": "Musk",
-      "Company": "SpaceX"
-    }
-  ];
+  var initialize = function() {
+    service.association = { };
+
+    service.error = '';
+
+    service.macaddress = '';
+
+    service.personType = '';
+
+    service.selectedPerson = { };
+
+    // Hard-coded personnel for development without REST API backend running
+    // TOOD: Remove this temporary hard-coded data
+  //   service.personnel = [
+  //     {
+  //       "JCE_PID": 1,
+  //       "PersonnelRole": "Craft",
+  //       "FirstName": "Franklin",
+  //       "MiddleName": "Delano",
+  //       "LastName": "Roosevelt",
+  //       "HireDate": "2013-09-05T00:00:00",
+  //       "LocalJacobsBadgeID": "1111",
+  //       "CRCode_FunctionCode": "YYYY",
+  //       "EmployeeNumber": "01234567",
+  //       "OraclePartyID": "1234567",
+  //       "HRJobTitle": "CARPENTER 03",
+  //       "Department": "0000 GENERAL",
+  //       "Shift": "1",
+  //       "Skill": "CARPENTER",
+  //       "Class": "CRAFT FOREMAN",
+  //       "CrewCode": "ASDF",
+  //       "Status": "Y",
+  //       "JacobsStartDate": "2017-05-04T00:00:00",
+  //       "LocationStartDate": "2013-09-05T00:00:00",
+  //       "DateLastChange": "2017-08-01T00:00:00",
+  //       "Company": "Jacobs"
+  //     },
+  //     {
+  //       "JCE_PID": 3,
+  //       "PersonnelRole": "Staff",
+  //       "FirstName": "John",
+  //       "MiddleName": "Fitzgerald",
+  //       "LastName": "Kennedy",
+  //       "HireDate": "2007-10-04T00:00:00",
+  //       "CRCode_FunctionCode": "1234",
+  //       "EmployeeNumber": "0987654321",
+  //       "OraclePartyID": "987654321",
+  //       "HRJobTitle": "CLERK 06",
+  //       "Department": "0000 GENERAL",
+  //       "JacobsStartDate": "2014-11-24T00:00:00",
+  //       "Company": "Jacobs"
+  //     },
+  //     {
+  //       "JCE_PID": 2,
+  //       "PersonnelRole": "Craft",
+  //       "FirstName": "John",
+  //       "MiddleName": "H.",
+  //       "LastName": "Doe",
+  //       "HireDate": "2013-09-05T00:00:00",
+  //       "LocalJacobsBadgeID": "1111",
+  //       "CRCode_FunctionCode": "YYYY",
+  //       "EmployeeNumber": "01234567",
+  //       "OraclePartyID": "1234567",
+  //       "HRJobTitle": "CARPENTER 03",
+  //       "Department": "0000 GENERAL",
+  //       "Shift": "1",
+  //       "Skill": "CARPENTER",
+  //       "Class": "CRAFT FOREMAN",
+  //       "CrewCode": "ASDF",
+  //       "Status": "Y",
+  //       "JacobsStartDate": "2017-05-04T00:00:00",
+  //       "LocationStartDate": "2013-09-05T00:00:00",
+  //       "DateLastChange": "2017-08-01T00:00:00",
+  //       "Company": "INEOS"
+  //     },
+  //     {
+  //       "JCE_PID": 4,
+  //       "PersonnelRole": "Staff",
+  //       "FirstName": "Jane",
+  //       "MiddleName": "T.",
+  //       "LastName": "Doe",
+  //       "HireDate": "2007-10-04T00:00:00",
+  //       "CRCode_FunctionCode": "1234",
+  //       "EmployeeNumber": "0987654321",
+  //       "OraclePartyID": "987654321",
+  //       "HRJobTitle": "CLERK 06",
+  //       "Department": "0000 GENERAL",
+  //       "JacobsStartDate": "2014-11-24T00:00:00",
+  //       "Company": "INEOS"
+  //     },
+  //     {
+  //       "JCE_PID": 5,
+  //       "FirstName": "Bob",
+  //       "LastName": "Loblaw",
+  //       "Company": "Bob Loblaw's Law Blog"
+  //     },
+  //     {
+  //       "JCE_PID": 6,
+  //       "FirstName": "Rob",
+  //       "LastName": "Loblaw",
+  //       "Company": "Bob Loblaw's Law Blog"
+  //     },
+  //     {
+  //       "JCE_PID": 7,
+  //       "FirstName": "JoJo",
+  //       "LastName": "Josephson",
+  //       "Company": "JoJo's Jigs"
+  //     },
+  //     {
+  //       "JCE_PID": 8,
+  //       "FirstName": "Elon",
+  //       "LastName": "Musk",
+  //       "Company": "SpaceX"
+  //     }
+  //   ];
+  };
 
   // Sends a POST request to add the specified person to the database
   service.addPerson = function(person, successCallback, errorCallback) {
     var url = '/tads/api/v1/';
 
-    // TODO: Convert personType to one of the folloiwng: Client, Craft, Staff, Sub, Visitor
-
     // Get the appropriate endpoint.  Jacobs personnel can not be added
     switch (service.personType) {
       case "Client":
         url += 'client';
+        person.personnelrole = "Client";
         break;
 
       case "Visitor":
         url += 'visitor';
+        person.personnelrole = "Visitor";
         break;
 
       case "Subcontractor":
         url += 'subcontractor';
+        person.personnelrole = "Sub";
         break;
 
       default:
@@ -234,12 +240,16 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
       }).then(
         function(response) {
           successCallback(response);
+          initialize();
         },
         function (response) {
           errorCallback(response);
         });
         //$http.post('/someUrl', service.association, config).then(successCallback, errorCallback);
       };
+
+      // Initialize the service.
+      initialize();
 
       // Initialize the personnel list.
       service.getPersonnel();
@@ -347,7 +357,8 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
               $log.debug('HTTP response: ' + response.status);
 
               // Go back to the welcome state
-              $state.go('welcome');
+              //$state.go('welcome');
+              $scope.associationSuccess = true;
             },
 
             function(response) { // Error callback
