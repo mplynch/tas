@@ -39,7 +39,7 @@ var server = new webpackDevServer(compiler, {
   inline: true,
   proxy: {
     '/tads/api': {
-      target: 'http://10.4.201.20:3000',
+      target: 'http://10.4.201.17:3000',
       changeOrigin: true,
       secure: false,
       logLevel: 'debug'    }

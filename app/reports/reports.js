@@ -3,6 +3,7 @@
 var moduleTemplate = require('./reports.html');
 var allTagsTemplate = require('./tags.all.html');
 var associatedTagsTemplate = require('./tags.associated.html');
+var menuTemplate = require('./reports.menu.html');
 var lostTagsTemplate = require('./tags.lost.html');
 var unassociatedTagsTemplate = require('./tags.unassociated.html');
 
@@ -10,102 +11,97 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
 
 .config(['$stateProvider', function($stateProvider) {
   $stateProvider.state('reports', {
-    url: '/reports',
+    abstract: 'true',
     template: moduleTemplate,
+  })
+
+  .state('reports.menu', {
+    template: menuTemplate,
     controller: 'ReportsCtrl'
   })
 
   .state('reports.all', {
-    url: '/reports/all',
-    template: allTagsTemplate
+    template: allTagsTemplate,
+    controller: 'ReportsCtrl'
   })
 
   .state('reports.associated', {
-    url: '/reports/associated',
-    template: associatedTagsTemplate
+    template: associatedTagsTemplate,
+    controller: 'ReportsCtrl'
   })
 
   .state('reports.unassociated', {
-    url: '/reports/unassociated',
-    template: unassociatedTagsTemplate
+    template: unassociatedTagsTemplate,
+    controller: 'ReportsCtrl'
   })
 
   .state('reports.lost', {
-    url: '/reports/lost',
-    template: lostTagsTemplate
+    template: lostTagsTemplate,
+    controller: 'ReportsCtrl'
   });
 }])
 
-.factory('ReportsService', ['$http', '$log', function($http, $log) {
-  var service = {};
-
-  service.allTags = [];
-  service.assignedTags = [
-    {
-      "personnel_type": "Subcontractor",
-      "mac_address": "00:00:FF:AA:1C:4B",
-      "first_name": "Bob",
-      "last_name": "Dole",
-      "company": "U.S. Government"
-    },
-    {
-      "personnel_type": "Subcontractor",
-      "mac_address": "00:00:FF:AA:4A:22",
-      "first_name": "William",
-      "middle_name": "Jefferson",
-      "last_name": "Clinton",
-      "company": "U.S. Government"
-    }
-  ];
-  service.lostTags = [];
-  service.unassignedTags = [];
-
-  service.getAllTags = function(macaddress, successCallback, errorCallback) {
-    $http.get('/tads/api/v1/tags').then(
+.service('ReportsService', ['$http', '$log', '$q', function($http, $log, $q) {
+  this.getAllTags = function() {
+    return $http.get('/tads/api/v1/tags/current_tags/status', {cache: true}).then(
       function(response) {
-        service.allTags = response.data;
-      },
-      function(response) {
-        service.error = 'Failed to get tags!';
-        $log.error('Failed to retrieve tags!');
+        return response.data;
       }
     );
-  };
+  }
 
-  service.getUnassignedTags = function(macaddress, successCallback, errorCallback) {
-    $http.get('/tads/api/v1/tags').then(
+  this.getAssignedTags = function() {
+    return $http.get('/tads/api/v1/tags/current_tags', {cache: true}).then(
       function(response) {
-        service.unassignedTags = response.data;
-      },
-      function(response) {
-        service.error = 'Failed to get tags!';
-        $log.error('Failed to retrieve tags!');
+        return response.data;
       }
     );
-  };
+  }
 
-  service.getLostTags = function(macaddress, successCallback, errorCallback) {
-    $http.get('/tads/api/v1/tags').then(
+  this.getLostTags = function() {
+    return $http.get('/tads/api/v1/tags/lost_tags', {cache: true}).then(
       function(response) {
-        service.lostTags = response.data;
-      },
-      function(response) {
-        service.error = 'Failed to get tags!';
-        $log.error('Failed to retrieve tags!');
+        return response.data;
       }
     );
-  };
+  }
 
-  return service;
+  this.getUnassignedTags = function() {
+    return $http.get('/tads/api/v1/tags/available_tags', {cache: true}).then(
+      function(response) {
+        return response.data;
+      }
+    );
+  }
 }])
 
 .controller('ReportsCtrl', ['$scope', '$log', 'ReportsService', function($scope, $log, ReportsService) {
-  $scope.allTags = ReportsService.allTags;
-  $scope.assignedTags = ReportsService.assignedTags;
-  $scope.lostTags = ReportsService.lostTags;
-  $scope.unassignedTags = ReportsService.unassignedTags;
+  ReportsService.getAllTags().then(
+    function(success) {
+      $scope.tags = success;
+    },
+    function(error) {
+      $log.error('Error!');
+    }
+  );
+
+  ReportsService.getAssignedTags().then(
+    function(success) {
+      $scope.assignedTags = success;
+    },
+    function(error) {
+      $log.error('Error!');
+    }
+  );  
+
+  ReportsService.getUnassignedTags().then(
+    function(success) {
+      $scope.unassignedTags = success;
+    },
+    function(error) {
+      $log.error('Error!');
+    }
+  );
 
   // TODO: Support printing of tables: https://dzone.com/articles/building-simple-angularjs
-
-  $log.info('Ran ReportsCtrl');
 }]);

@@ -16,7 +16,7 @@
   <title>JCE - Tag Association System</title>
 </head>
 
-<body>
+<body ng-cloak>
   <div class="container">
     <nav class="navbar navbar-default" role="navigation">
       <div class="container-fluid">
@@ -57,13 +57,22 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
       <![endif]-->
 
-      <div ui-view></div>
-
+      <div ng-controller="AlertCtrl">
+            <div class="row">
+                <div class="col-xs-3 col-sm-3 col-md-3"></div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">{{alert.msg}}</div>
+                </div>
+                <div class="col-xs-3 col-sm-3 col-md-3"></div>
+            </div>
+        </div>
+      <div ng-controller="SpinnerCtrl">
+        <div ng-show="showSpinner">
+          <img src="/img/loading.gif">
+        </div>
+        <div ng-hide="showSpinner" ui-view></div>
+      </div>
     </div>
-
-    <!-- In production use:
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
-  -->
 
   <script src="vendor.bundle.js"></script>
   <script src="app.min.js"></script>

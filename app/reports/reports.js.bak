@@ -1,0 +1,129 @@
+'use strict';
+
+var moduleTemplate = require('./reports.html');
+var allTagsTemplate = require('./tags.all.html');
+var associatedTagsTemplate = require('./tags.associated.html');
+var menuTemplate = require('./reports.menu.html');
+var lostTagsTemplate = require('./tags.lost.html');
+var unassociatedTagsTemplate = require('./tags.unassociated.html');
+
+angular.module('myApp.reports', ['ui.router', 'ui.grid'])
+
+.config(['$stateProvider', function($stateProvider) {
+  $stateProvider.state('reports', {
+    abstract: 'true',
+    template: moduleTemplate,
+  })
+
+  .state('reports.menu', {
+    template: menuTemplate,
+    controller: 'ReportsCtrl'
+  })
+
+  .state('reports.all', {
+    template: allTagsTemplate,
+    controller: 'ReportsCtrl'
+  })
+
+  .state('reports.associated', {
+    template: associatedTagsTemplate,
+    controller: 'ReportsCtrl'
+  })
+
+  .state('reports.unassociated', {
+    template: unassociatedTagsTemplate,
+    controller: 'ReportsCtrl'
+  })
+
+  .state('reports.lost', {
+    template: lostTagsTemplate,
+    controller: 'ReportsCtrl'
+  });
+}])
+
+.service('ReportsService', ['$http', '$log', function($http, $log) {
+    this.getUnassignedTags = function() {
+      $http.get('/tads/api/v1/tags/available_tags').then(
+        function(success) {
+          service.unassignedTags = success.data;
+          return success.data;
+        }
+      );
+    }
+
+  // service.allTags = [];
+  // service.assignedTags = [];
+  // service.assignedTags = [
+  //   {
+  //     "personnel_type": "Subcontractor",
+  //     "mac_address": "00:00:FF:AA:1C:4B",
+  //     "first_name": "Bob",
+  //     "last_name": "Dole",
+  //     "company": "U.S. Government"
+  //   },
+  //   {
+  //     "personnel_type": "Subcontractor",
+  //     "mac_address": "00:00:FF:AA:4A:22",
+  //     "first_name": "William",
+  //     "middle_name": "Jefferson",
+  //     "last_name": "Clinton",
+  //     "company": "U.S. Government"
+  //   }
+  // ];
+  // service.lostTags = [];
+  // service.unassignedTags = [];
+
+  // service.getAllTags = function() {
+  //   $http.get('/tads/api/v1/tags').then(
+  //     function(response) {
+  //       service.allTags = response.data;
+  //     },
+  //     function(response) {
+  //       service.error = 'Failed to get tags!';
+  //       $log.error('Failed to retrieve tags!');
+  //     }
+  //   );
+  // };
+  //
+  // service.getAssignedTags = function() {
+  //   $http.get('/tads/api/v1/tags/current_tags').then(
+  //     function(response) {
+  //       service.assignedTags = response.data;
+  //     },
+  //     function(response) {
+  //       service.error = 'Failed to get tags!';
+  //       $log.error('Failed to retrieve tags!');
+  //     }
+  //   );
+  // };
+
+  // service.getLostTags = function() {
+  //   $http.get('/tads/api/v1/tags/lost_tags').then(
+  //     function(success) {
+  //       service.lostTags = success.data;
+  //       return success.data;
+  //     },
+  //     function(error) {
+  //       service.error = 'Failed to get tags!';
+  //       $log.error('Failed to retrieve tags!');
+  //       return error;
+  //     }
+  //   );
+// };
+
+}])
+
+.controller('ReportsCtrl', ['$scope', '$log', 'ReportsService', function($scope, $log, ReportsService) {
+  ReportsService.getUnassignedTags().then(
+    function(success) {},
+    function(error) {}
+  );
+
+  // $scope.allTags = ReportsService.allTags;
+  // $scope.assignedTags = ReportsService.assignedTags;
+  // $scope.lostTags = ReportsService.lostTags;
+
+
+
+  // TODO: Support printing of tables: https://dzone.com/articles/building-simple-angularjs
+}]);

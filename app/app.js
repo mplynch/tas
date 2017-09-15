@@ -2,6 +2,7 @@
 
 /************** Import modules for WebPack to work its magic. *****************/
 
+require('./alert/alert.js');
 require('./associate/associate.js');
 require('./focus/focus.js');
 require('./reports/reports.js');
@@ -24,6 +25,7 @@ angular.module('myApp', [
   'ui.bootstrap',
   'ui.grid',
   'angular.filter',
+  'myApp.alert',
   'myApp.welcome',
   'myApp.associate',
   'myApp.focus',
