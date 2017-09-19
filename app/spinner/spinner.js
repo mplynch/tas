@@ -18,11 +18,11 @@ angular.module('myApp.spinner', [])
 
 .controller('SpinnerCtrl', ['$scope', '$spinner',
 function ($scope, $spinner) {
-  $scope.showSpinner = $alert.$showSpinner();
+  $scope.showSpinner = $spinner.showSpinner
 
   $scope.$watch(
     function () {
-      return $spinner.$showSpinner()
+      return $spinner.showSpinner
     },
     function (showSpinner) {
       $scope.showSpinner = showSpinner;

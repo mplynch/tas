@@ -6,6 +6,7 @@ require('./alert/alert.js');
 require('./associate/associate.js');
 require('./focus/focus.js');
 require('./reports/reports.js');
+require('./spinner/spinner.js');
 require('./unassociate/unassociate.js');
 require('./welcome/welcome.js');
 
@@ -29,6 +30,7 @@ angular.module('myApp', [
   'myApp.welcome',
   'myApp.associate',
   'myApp.focus',
+  'myApp.spinner',
   'myApp.unassociate',
   'myApp.reports'
 ]).
