@@ -43,7 +43,7 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
 
 .service('ReportsService', ['$http', '$log', '$q', function($http, $log, $q) {
   this.getAllTags = function() {
-    return $http.get('/tads/api/v1/tags/current_tags/status', {cache: true}).then(
+    return $http.get('/tads/api/v1/views/all_tags', {cache: true}).then(
       function(response) {
         return response.data;
       }
@@ -51,7 +51,7 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
   }
 
   this.getAssignedTags = function() {
-    return $http.get('/tads/api/v1/tags/current_tags', {cache: true}).then(
+    return $http.get('/tads/api/v1/views/current_tags', {cache: true}).then(
       function(response) {
         return response.data;
       }
@@ -59,7 +59,7 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
   }
 
   this.getLostTags = function() {
-    return $http.get('/tads/api/v1/tags/lost_tags', {cache: true}).then(
+    return $http.get('/tads/api/v1/views/lost_tags', {cache: true}).then(
       function(response) {
         return response.data;
       }
@@ -67,7 +67,7 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
   }
 
   this.getUnassignedTags = function() {
-    return $http.get('/tads/api/v1/tags/available_tags', {cache: true}).then(
+    return $http.get('/tads/api/v1/views/available_tags', {cache: true}).then(
       function(response) {
         return response.data;
       }
@@ -76,9 +76,32 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
 }])
 
 .controller('ReportsCtrl', ['$scope', '$log', 'ReportsService', function($scope, $log, ReportsService) {
+  $scope.allTagsGridOptions = {
+    columnDefs: [
+      { name:'MAC Address', field: 'MAC_Address' },
+      { name:'Status', field: 'Tag_Status' },
+      { name:'Last Name', field: 'LastName' },
+      { name:'First Name', field: 'FirstName' },
+      { name:'Middle Name', field: 'MiddleName' },
+      { name:'Company', field: 'Company' }
+    ],
+    data: []
+  };
+
+  $scope.associatedTagsGridOptions = {
+    columnDefs: [
+      { name:'MAC Address', field: 'MAC_Address' },
+      { name:'First Name', field: 'FirstName' },
+      { name:'Middle Name', field: 'MiddleName' },
+      { name:'Last Name', field: 'LastName' },
+      { name:'Company', field: 'Company' }
+    ],
+    data: []
+  };
+
   ReportsService.getAllTags().then(
     function(success) {
-      $scope.tags = success;
+      $scope.allTagsGridOptions.data = success;
     },
     function(error) {
       $log.error('Error!');
@@ -87,12 +110,12 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
 
   ReportsService.getAssignedTags().then(
     function(success) {
-      $scope.assignedTags = success;
+      $scope.associatedTagsGridOptions.data = success;
     },
     function(error) {
       $log.error('Error!');
     }
-  );  
+  );
 
   ReportsService.getUnassignedTags().then(
     function(success) {
