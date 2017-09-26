@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "description": "A Jacobs Connected Enterprise tool used for assigning personnel tracking tags.",
-  "repository": "https://github.com/angular/angular-seed",
+  "repository": "https://github.com/mplynch/tas/",
   "license": "MIT",
   "devDependencies": {
     "@uirouter/angularjs": "^1.0.3",

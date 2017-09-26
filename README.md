@@ -8,24 +8,19 @@ A Jacobs Connected Enterprise tool used for assigning personnel tracking tags.
 
 1. Node.js (v6.11.2+)
 
-### Instructions
+### Instructions (Development)
 
 1. Clone this respository
 2. Navigate to your clone and run `npm install`
-3. Run `npm start` to launch the webserver
+3. Run `npm run dev` to launch the webserver
 4. Navigate to `http://localhost:8080/` to verify that the webserver is running
 
-## Contributing
+### Instructions (Production)
 
-1. Fork it!
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request :D
-
-## History
-
-TODO: Write history
+1. Clone this respository
+2. Navigate to your clone and run `npm install`
+3. Run `npm run build` to execute a webpack build of the application
+4. Copy the contents of /dist to your web server and navigate to index.html
 
 ## Credits
 
