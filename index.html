@@ -68,8 +68,13 @@
       </div>
 
       <div ng-controller="SpinnerCtrl">
-        <div ng-show="showSpinner">
+        <div ng-show="showSpinner" class="text-center">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="text-center">Loading...</h3>
+            </div>
           <img src="img/loading.gif">
+          </div>
         </div>
         <div ng-hide="showSpinner" ui-view></div>
       </div>
