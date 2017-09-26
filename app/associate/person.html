@@ -21,7 +21,7 @@
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
         <select ng-model="person" class="form-control" name="clientName"
-          ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName for person in personnel | filterBy: ['Company']: 'INEOS'"
+          ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName for person in personnel  | orderBy: 'LastName' | filterBy: ['Company']: 'INEOS'"
           ng-required="personType == 'Client'">
       </select>
       </div>

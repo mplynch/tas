@@ -60,116 +60,11 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
     service.personType = '';
 
     service.selectedPerson = { };
-
-    // Hard-coded personnel for development without REST API backend running
-    // TOOD: Remove this temporary hard-coded data
-    //   service.personnel = [
-    //     {
-    //       "JCE_PID": 1,
-    //       "PersonnelRole": "Craft",
-    //       "FirstName": "Franklin",
-    //       "MiddleName": "Delano",
-    //       "LastName": "Roosevelt",
-    //       "HireDate": "2013-09-05T00:00:00",
-    //       "LocalJacobsBadgeID": "1111",
-    //       "CRCode_FunctionCode": "YYYY",
-    //       "EmployeeNumber": "01234567",
-    //       "OraclePartyID": "1234567",
-    //       "HRJobTitle": "CARPENTER 03",
-    //       "Department": "0000 GENERAL",
-    //       "Shift": "1",
-    //       "Skill": "CARPENTER",
-    //       "Class": "CRAFT FOREMAN",
-    //       "CrewCode": "ASDF",
-    //       "Status": "Y",
-    //       "JacobsStartDate": "2017-05-04T00:00:00",
-    //       "LocationStartDate": "2013-09-05T00:00:00",
-    //       "DateLastChange": "2017-08-01T00:00:00",
-    //       "Company": "Jacobs"
-    //     },
-    //     {
-    //       "JCE_PID": 3,
-    //       "PersonnelRole": "Staff",
-    //       "FirstName": "John",
-    //       "MiddleName": "Fitzgerald",
-    //       "LastName": "Kennedy",
-    //       "HireDate": "2007-10-04T00:00:00",
-    //       "CRCode_FunctionCode": "1234",
-    //       "EmployeeNumber": "0987654321",
-    //       "OraclePartyID": "987654321",
-    //       "HRJobTitle": "CLERK 06",
-    //       "Department": "0000 GENERAL",
-    //       "JacobsStartDate": "2014-11-24T00:00:00",
-    //       "Company": "Jacobs"
-    //     },
-    //     {
-    //       "JCE_PID": 2,
-    //       "PersonnelRole": "Craft",
-    //       "FirstName": "John",
-    //       "MiddleName": "H.",
-    //       "LastName": "Doe",
-    //       "HireDate": "2013-09-05T00:00:00",
-    //       "LocalJacobsBadgeID": "1111",
-    //       "CRCode_FunctionCode": "YYYY",
-    //       "EmployeeNumber": "01234567",
-    //       "OraclePartyID": "1234567",
-    //       "HRJobTitle": "CARPENTER 03",
-    //       "Department": "0000 GENERAL",
-    //       "Shift": "1",
-    //       "Skill": "CARPENTER",
-    //       "Class": "CRAFT FOREMAN",
-    //       "CrewCode": "ASDF",
-    //       "Status": "Y",
-    //       "JacobsStartDate": "2017-05-04T00:00:00",
-    //       "LocationStartDate": "2013-09-05T00:00:00",
-    //       "DateLastChange": "2017-08-01T00:00:00",
-    //       "Company": "INEOS"
-    //     },
-    //     {
-    //       "JCE_PID": 4,
-    //       "PersonnelRole": "Staff",
-    //       "FirstName": "Jane",
-    //       "MiddleName": "T.",
-    //       "LastName": "Doe",
-    //       "HireDate": "2007-10-04T00:00:00",
-    //       "CRCode_FunctionCode": "1234",
-    //       "EmployeeNumber": "0987654321",
-    //       "OraclePartyID": "987654321",
-    //       "HRJobTitle": "CLERK 06",
-    //       "Department": "0000 GENERAL",
-    //       "JacobsStartDate": "2014-11-24T00:00:00",
-    //       "Company": "INEOS"
-    //     },
-    //     {
-    //       "JCE_PID": 5,
-    //       "FirstName": "Bob",
-    //       "LastName": "Loblaw",
-    //       "Company": "Bob Loblaw's Law Blog"
-    //     },
-    //     {
-    //       "JCE_PID": 6,
-    //       "FirstName": "Rob",
-    //       "LastName": "Loblaw",
-    //       "Company": "Bob Loblaw's Law Blog"
-    //     },
-    //     {
-    //       "JCE_PID": 7,
-    //       "FirstName": "JoJo",
-    //       "LastName": "Josephson",
-    //       "Company": "JoJo's Jigs"
-    //     },
-    //     {
-    //       "JCE_PID": 8,
-    //       "FirstName": "Elon",
-    //       "LastName": "Musk",
-    //       "Company": "SpaceX"
-    //     }
-    //   ];
   };
 
   // Sends a POST request to add the specified person to the database
   service.addPerson = function(person, successCallback, errorCallback) {
-    var url = '/tads/api/v1/';
+    var url = '/tads/api/v1/addpersonnel/';
 
     // Get the appropriate endpoint.  Jacobs personnel can not be added
     switch (service.personType) {
@@ -199,7 +94,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
     }).then(
       // Success callback
       function(response) {
-        successCallback(response);
+        successCallback(response.data);
       },
       // Error callback
       function(response){
@@ -212,6 +107,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
   service.getPersonnel = function(forceRefresh) {
     // TODO: Add HTML to show error and to prevent frontend from accepting user input if personnel aren't retrieved
 
+    // Queries the RESTful service.  NOTE: Caching can be optionally enabled!
     return $http.get('/tads/api/v1/Personnel', {cache: forceRefresh}).then(
       function(response) {
         $log.debug('Successfully retrieved personnel.');
@@ -254,8 +150,8 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
   }])
 
   // Controller for the tag association wizard
-  .controller('AssociateCtrl', ['$scope', '$state', 'SubscribeService', '$log', '$uibModal', '$alert',
-    function($scope, $state, SubscribeService, $log, $uibModal, $alert) {
+  .controller('AssociateCtrl', ['$scope', '$state', 'SubscribeService', '$log', '$uibModal', '$alert', '$spinner',
+    function($scope, $state, SubscribeService, $log, $uibModal, $alert, $spinner) {
     // Get data persisted through the association service
     $scope.association = SubscribeService.association;
     $scope.types = SubscribeService.personTypes;
@@ -263,18 +159,22 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
     $scope.selectedPerson = SubscribeService.selectedPerson;
     $scope.macaddress = SubscribeService.macaddress;
 
+    $spinner.$show();
+
     // Get personnel data without forcing a server refresh
     SubscribeService.getPersonnel(true).then(
       function(success) {
         $scope.personnel = success;
         $scope.personnelLoaded = true;
-        $log.info('Got Personnel!');
+        $spinner.$hide();
+        $log.debug('Got Personnel!');
       },
       function(error) {
         $scope.personnelLoaded = false;
+        //$spinner.$hide();
         $alert.$danger('Failed to load personnel: ' + error.status + " - " +
           error.statusText);
-          $log.error('Failed to get personnel!');
+        $log.error('Failed to get personnel!');
       }
     );
 
@@ -339,19 +239,23 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
       // Wait for the modal dialog's result
       modalInstance.result.then(
         // OK callback
-        function () {
+        function (response) {
+          SubscribeService.personnel.push(response);
+          $scope.personnel = SubscribeService.personnel;
+          $scope.person = response;
+
           // Force a refresh of the personnel to get the new person's JCE_PID
           //$scope.personnel = SubscribeService.getPersonnel(true);
-          SubscribeService.getPersonnel(false).then(
-            function(success) {
-              $scope.personnel = success;
-              $scope.personnelLoaded = true;
-            },
-            function(error) {
-              $log.error(error);
-              $scope.personnelLoaded = false;
-            }
-          );
+          // SubscribeService.getPersonnel(false).then(
+          //   function(success) {
+          //     $scope.personnel = success;
+          //     $scope.personnelLoaded = true;
+          //   },
+          //   function(error) {
+          //     $log.error(error);
+          //     $scope.personnelLoaded = false;
+          //   }
+          // );
 
           $log.info('New person added.');
         },
@@ -398,10 +302,8 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
         SubscribeService.addPerson($scope.person,
           // Success callback
           function(response) {
-            // TODO: response contains the new person??, so set selectd person
-
-            // Close the modal
-            $uibModalInstance.close();
+            // Close the modal and return the response
+            $uibModalInstance.close(response);
           },
 
           // Error callback
