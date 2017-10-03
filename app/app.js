@@ -4,6 +4,7 @@
 
 require('./alert/alert.js');
 require('./associate/associate.js');
+require('./version/version.js');
 require('./focus/focus.js');
 require('./reports/reports.js');
 require('./spinner/spinner.js');
@@ -11,7 +12,6 @@ require('./unassociate/unassociate.js');
 require('./welcome/welcome.js');
 
 require("./app.css");
-//require('bootstrap/dist/css/bootstrap.min.css');
 require('bootswatch/paper/bootstrap.min.css');
 require('angular-ui-grid/ui-grid.css');
 /******************************************************************************/
@@ -32,7 +32,8 @@ angular.module('myApp', [
   'myApp.focus',
   'myApp.spinner',
   'myApp.unassociate',
-  'myApp.reports'
+  'myApp.reports',
+  'myApp.version'
 ]).
 
 config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
