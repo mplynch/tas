@@ -15,6 +15,8 @@ module.exports = {
       'angular-loader',
       'angular-filter',
       'bootstrap',
+      'promise-polyfill',
+      './promise-polyfill.js',
       'jquery']
     },
     output: {

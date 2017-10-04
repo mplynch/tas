@@ -15,7 +15,10 @@ module.exports = {
       'angular-loader',
       'angular-filter',
       'bootstrap',
-      'jquery']
+      'promise-polyfill',
+      './promise-polyfill.js',
+      'jquery'
+      ]
     },
     output: {
       path: __dirname + '/js',
