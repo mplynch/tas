@@ -26,7 +26,7 @@
       </select>
       </div>
       <div class="col-md-3 col-xs-2 text-left">
-        <button class="btn btn-primary" type="button" ng-click="addPerson()"><span class="glyphicon glyphicon-user"></span> Add</button>
+        <button class="btn btn-primary" type="button" ng-click="showAddPersonModal()"><span class="glyphicon glyphicon-user"></span> Add</button>
       </div>
     </div>
   </div>
@@ -55,7 +55,7 @@
         <select ng-model="person" class="form-control" name="subcontractor" ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName group by person.Company for person in personnel | omit: 'Company.toUpperCase() === \'JACOBS\'' | omit: 'Company.toUpperCase() === \'INEOS\'' | omit: '!Company'" ng-required="personType == 'Subcontractor'"></select>
       </div>
       <div class="col-md-3 col-xs-2 text-left">
-        <button class="btn btn-primary" type="button" ng-click="addPerson()"><span class="glyphicon glyphicon-user"></span> Add</button>
+        <button class="btn btn-primary" type="button" ng-click="showAddPersonModal()"><span class="glyphicon glyphicon-user"></span> Add</button>
       </div>
     </div>
   </div>
