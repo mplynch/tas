@@ -10,8 +10,6 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <!-- <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-  <link href="bower_components/bootswatch/flatly/bootstrap.min.css" rel="stylesheet" type="text/css"> -->
   <link href="app.css" rel="stylesheet">
   <title>JCE - Tag Association System</title>
 </head>
@@ -50,6 +48,8 @@
               </ul>
             </li>
           </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><small><p class="navbar-text text-muted" app-version></p></small></li>
         </div>
       </nav>
 
@@ -78,10 +78,6 @@
         </div>
         <div ng-hide="showSpinner" ui-view></div>
       </div>
-
-    <div class="text-center">
-      <p class="text-muted">Version <span app-version></span></p>
-    </div>
     </div>
 
     <script src="vendor.bundle.js"></script>
