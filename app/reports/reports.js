@@ -94,7 +94,9 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
       { name:'First Name', field: 'FirstName' },
       { name:'Middle Name', field: 'MiddleName' },
       { name:'Last Name', field: 'LastName' },
-      { name:'Company', field: 'Company' }
+      { name:'Company', field: 'Company' },
+      { name:'Employee Number', field: "EmployeeNumber"},
+      { name:'Crew Code', field: "CrewCode"}
     ],
     data: []
   };
