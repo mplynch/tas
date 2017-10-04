@@ -2,6 +2,7 @@
 
 /************** Import modules for WebPack to work its magic. *****************/
 
+// Include all of the app components
 require('./alert/alert.js');
 require('./associate/associate.js');
 require('./version/version.js');
@@ -11,8 +12,13 @@ require('./spinner/spinner.js');
 require('./unassociate/unassociate.js');
 require('./welcome/welcome.js');
 
+// Include the app's custom styling
 require("./app.css");
+
+// Bootswatch is a Bootstrap CSS design. The Paper style has a nice flat look
 require('bootswatch/paper/bootstrap.min.css');
+
+// Required to style Angular-UI Grid controls
 require('angular-ui-grid/ui-grid.css');
 /******************************************************************************/
 
@@ -21,21 +27,22 @@ require('angular-ui-grid/ui-grid.css');
 
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
+  'angular.filter',
   'ngAnimate',
   'ui.router',
   'ui.bootstrap',
   'ui.grid',
-  'angular.filter',
   'myApp.alert',
-  'myApp.welcome',
   'myApp.associate',
   'myApp.focus',
+  'myApp.reports',
   'myApp.spinner',
   'myApp.unassociate',
-  'myApp.reports',
-  'myApp.version'
+  'myApp.version',
+  'myApp.welcome'
 ]).
 
 config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+  // Point any unknown URLs back to the root
   $urlRouterProvider.otherwise('/');
 }]);

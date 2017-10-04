@@ -21,11 +21,3 @@ A Jacobs Connected Enterprise tool used for assigning personnel tracking tags.
 2. Navigate to your clone and run `npm install`
 3. Run `npm run build` to execute a webpack build of the application
 4. Copy the contents of /dist to your web server and navigate to index.html
-
-## Credits
-
-TODO: Write credits
-
-## License
-
-TODO: Write license
