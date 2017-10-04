@@ -33,15 +33,19 @@
 </div>
 
 <div ng-show="personType == 'Visitor'">
-  <h4>Please enter the name of the visitor.</h4>
+  <h4>Which visitor is being assigned a tag?</h4>
   <div class="container">
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <input type="text" class="form-control" id="visitor_name" placeholder="First Name" ng-model="person.FirstName" ng-required="personType == 'Visitor'">
-        <input type="text" class="form-control" id="visitor_name" placeholder="Last Name" ng-model="person.LastName" ng-required="personType == 'Visitor'">
+        <select ng-model="person" class="form-control" name="clientName"
+          ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName for person in personnel  | orderBy: 'LastName' | filterBy: ['PersonnelRole']: 'Visitor'"
+          ng-required="personType == 'Visitor'">
+      </select>
       </div>
-      <div class="col-md-3 col-xs-2"></div>
+      <div class="col-md-3 col-xs-2 text-left">
+        <button class="btn btn-primary" type="button" ng-click="showAddPersonModal()"><span class="glyphicon glyphicon-user"></span> Add</button>
+      </div>
     </div>
   </div>
 </div>

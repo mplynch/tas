@@ -249,7 +249,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
         addVisitor = function(person) {
           return SubscribeService.addPerson(person).then(
             function(newPerson){ // Success callback
-              //SubscribeService.personnel.push(response.data);
+
               $scope.personnel = SubscribeService.personnel;
               $scope.person = newPerson;
               SubscribeService.selectedPerson = newPerson;
@@ -260,7 +260,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
         {
           // Handle HTTP error 409 specifically - means tag is already assigned
           if (fault.status == 409) {
-            $log.warning("The tag being assigned is already assigned to another person.");
+            $log.warn("The tag being assigned is already assigned to another person.");
             $alert.$warning("The tag being assigned is already assigned to another person.");
           }
 
@@ -272,20 +272,8 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
           }
         };
 
-        // Visitor needs to be added first?
-        if (SubscribeService.personType == "Visitor")
-        {
-          // Add the visitor first, then make the association and report errors
-          addVisitor($scope.selectedPerson)
-          .then(submitAssociation)
-          .catch(reportProblems);
-        }
-
-        else {
-          // Just submit the association and report any errors
-          submitAssociation()
-          .catch(reportProblems);
-        }
+        // Just submit the association and report any errors
+        submitAssociation().catch(reportProblems);
       };
     }])
 
