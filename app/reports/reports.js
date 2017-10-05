@@ -16,9 +16,8 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
   })
 
   .state('reports.menu', {
-    template: menuTemplate,
-    controller: 'ReportsCtrl'
-  })
+    template: menuTemplate
+    })
 
   .state('reports.all', {
     template: allTagsTemplate,
@@ -75,7 +74,7 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
   }
 }])
 
-.controller('ReportsCtrl', ['$scope', '$log', 'ReportsService', function($scope, $log, ReportsService) {
+.controller('ReportsCtrl', ['$scope', '$log', '$alert', 'ReportsService', function($scope, $log, $alert, ReportsService) {
   $scope.allTagsGridOptions = {
     columnDefs: [
       { name:'MAC Address', field: 'MAC_Address' },
@@ -104,29 +103,32 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
   ReportsService.getAllTags().then(
     function(success) {
       $scope.allTagsGridOptions.data = success;
-    },
-    function(error) {
-      $log.error('Error!');
-    }
-  );
+    })
+    .catch(
+      function(error) {
+        $alert.$danger('Failed to retrieve the All Tags report!');
+      }
+    );
 
-  ReportsService.getAssignedTags().then(
-    function(success) {
-      $scope.associatedTagsGridOptions.data = success;
-    },
-    function(error) {
-      $log.error('Error!');
-    }
-  );
+    ReportsService.getAssignedTags().then(
+      function(success) {
+        $scope.associatedTagsGridOptions.data = success;
+      })
+      .catch(
+        function(error) {
+          $alert.$danger('Failed to retrieve the Assigned Tags report!');
+        }
+      );
 
-  ReportsService.getUnassignedTags().then(
-    function(success) {
-      $scope.unassignedTags = success;
-    },
-    function(error) {
-      $log.error('Error!');
-    }
-  );
+      ReportsService.getUnassignedTags().then(
+        function(success) {
+          $scope.unassignedTags = success;
+        })
+        .catch(
+          function(error) {
+            $alert.$danger('Failed to retrieve the Unassigned Tags report!');
+          }
+        );
 
-  // TODO: Support printing of tables: https://dzone.com/articles/building-simple-angularjs
-}]);
+        // TODO: Support printing of tables: https://dzone.com/articles/building-simple-angularjs
+      }]);

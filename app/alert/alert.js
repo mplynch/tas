@@ -24,22 +24,22 @@ angular.module('myApp.alert', [])
   };
 
   var alertSuccess = function (message, clearOthers) {
-    clearOthers = clearOthers || true;
+    clearOthers = clearOthers;
     createAlert('success', message, clearOthers);
   };
 
   var alertInfo = function (message, clearOthers) {
-    clearOthers = clearOthers || true;
+    clearOthers = clearOthers;
     createAlert('info', message, clearOthers);
   };
 
   var alertWarning = function (message, clearOthers) {
-    clearOthers = clearOthers || true;
+    clearOthers = clearOthers;
     createAlert('warning', message, clearOthers);
   };
 
   var alertDanger = function (message, clearOthers) {
-    clearOthers = clearOthers || true;
+    clearOthers = clearOthers;
     createAlert('danger', message, clearOthers);
   };
 
