@@ -5,7 +5,7 @@
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
         <select ng-model="person" class="form-control" name="personName"
-          ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName + ' (' + person.EmployeeNumber + ')' for person in personnel | orderBy: 'LastName' | filterBy: ['Company']: 'Jacobs'"
+          ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName + ' (' + person.EmployeeNumber + ')' for person in personnel | orderBy: 'LastName' | filterBy: ['Company']: 'Jacobs' | omit: 'MAC_Address'"
           ng-required="personType == 'Jacobs Employee'" >
       </select>
       </div>
@@ -21,7 +21,7 @@
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
         <select ng-model="person" class="form-control" name="clientName"
-          ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName for person in personnel  | orderBy: 'LastName' | filterBy: ['Company']: 'INEOS'"
+          ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName for person in personnel  | orderBy: 'LastName' | filterBy: ['Company']: 'INEOS' | omit: 'MAC_Address'"
           ng-required="personType == 'Client'">
       </select>
       </div>
@@ -39,7 +39,7 @@
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
         <select ng-model="person" class="form-control" name="clientName"
-          ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName for person in personnel  | orderBy: 'LastName' | filterBy: ['PersonnelRole']: 'Visitor'"
+          ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName for person in personnel  | orderBy: 'LastName' | filterBy: ['PersonnelRole']: 'Visitor' | omit: 'MAC_Address'"
           ng-required="personType == 'Visitor'">
       </select>
       </div>
@@ -56,7 +56,7 @@
     <div class="row">
       <div class="col-md-3 col-xs-2"></div>
       <div class="col-md-6 col-xs-8">
-        <select ng-model="person" class="form-control" name="subcontractor" ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName group by person.Company for person in personnel | omit: 'Company.toUpperCase() === \'JACOBS\'' | omit: 'Company.toUpperCase() === \'INEOS\'' | omit: '!Company'" ng-required="personType == 'Subcontractor'"></select>
+        <select ng-model="person" class="form-control" name="subcontractor" ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName group by person.Company for person in personnel | omit: 'Company.toUpperCase() === \'JACOBS\'' | omit: 'Company.toUpperCase() === \'INEOS\'' | omit: '!Company' | omit: 'MAC_Address'" ng-required="personType == 'Subcontractor'"></select>
       </div>
       <div class="col-md-3 col-xs-2 text-left">
         <button class="btn btn-primary" type="button" ng-click="showAddPersonModal()"><span class="glyphicon glyphicon-user"></span> Add</button>
