@@ -17,12 +17,12 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
 .config(['$stateProvider', function($stateProvider) {
   $stateProvider.state('associate', {
     abstract: true,
-    url: '/',
     template: mainTemplate
   })
 
   .state('associate.type', {
     template: typeTemplate,
+    url: '/associate',
     controller: 'AssociateCtrl'
   })
 
@@ -50,7 +50,8 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
 
   service.personnel = [];
 
-  var postHeaders = {
+  var postOptions = {
+    timeout: 5000,
     headers: {
       'Content-Type': 'application/json'
     }
@@ -93,7 +94,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
       errorCallback("Unable to add personnel of type '" + service.personType + "'.");
     }
 
-    return $http.post(url, person, postHeaders).then(
+    return $http.post(url, person, postOptions).then(
       function(response){
         service.personnel.push(response.data);
         return response.data;
@@ -106,7 +107,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
       // TODO: Add HTML to show error and to prevent frontend from accepting user input if personnel aren't retrieved
 
       // Queries the RESTful service.  NOTE: Caching can be optionally enabled!
-      return $http.get('/tads/api/v1/Personnel', {cache: !forceRefresh}).then(
+      return $http.get('/tads/api/v1/Personnel', {timeout: 5000, cache: !forceRefresh}).then(
         function(response) {
           $log.debug('Successfully retrieved personnel.');
           service.personnel = response.data;
@@ -123,7 +124,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
       service.association.jce_pid = service.selectedPerson.JCE_PID;
       service.association.mac_address = service.macaddress;
 
-      return $http.post('/tads/api/v1/Associate', service.association, postHeaders).then(
+      return $http.post('/tads/api/v1/Associate', service.association, postOptions).then(
         function(response) {
           initialize();
         }
@@ -140,8 +141,8 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
   }])
 
   // Controller for the tag association wizard
-  .controller('AssociateCtrl', ['$scope', '$state', 'SubscribeService', '$log', '$uibModal', '$alert', '$spinner',
-  function($scope, $state, SubscribeService, $log, $uibModal, $alert, $spinner) {
+  .controller('AssociateCtrl', ['$scope', '$state', 'SubscribeService', '$log', '$uibModal', '$alert',
+  function($scope, $state, SubscribeService, $log, $uibModal, $alert) {
     // Get data persisted through the association service
     $scope.association = SubscribeService.association;
     $scope.types = SubscribeService.personTypes;
@@ -149,23 +150,28 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
     $scope.selectedPerson = SubscribeService.selectedPerson;
     $scope.macaddress = SubscribeService.macaddress;
 
-    // Show the wait spinner on the UI
-    $spinner.$show();
-
     // Get personnel data without forcing a server refresh
     SubscribeService.getPersonnel(true)
       .then(function(personnel) {
         $scope.personnel = personnel;
         $scope.personnelLoaded = true;
-        $spinner.$hide();
         $log.debug('Got Personnel!');
       })
       .catch(
         function(error) {
+          if (error.status == -1) {
+            $alert.$danger('Failed to load personnel.  The request timed out.');
+            $log.error('Failed to get personnel!');
+          }
+
+          else {
+            $alert.$danger('Failed to load personnel: ' + error.status + " - " +
+              error.statusText);
+            $log.error('Failed to get personnel!');
+          }
+
           $scope.personnelLoaded = false;
-          $alert.$danger('Failed to load personnel: ' + error.status + " - " +
-            error.statusText);
-          $log.error('Failed to get personnel!');
+
         }
     );
 
@@ -240,6 +246,8 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
       $scope.submit = function() {
         // Functions are defined as variables so promise chaining can be utilized
         var submitAssociation = function() {
+          $scope.associationInProgress = true;
+
           return SubscribeService.submitAssociation().then(
             function() { // Success callback
               $scope.associationSuccess = true;
@@ -260,8 +268,8 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
         {
           // Handle HTTP error 409 specifically - means tag is already assigned
           if (fault.status == 409) {
-            $log.warn("The tag being assigned is already assigned to another person.");
-            $alert.$warning("The tag being assigned is already assigned to another person.");
+            $log.error("Tag assignment failed.  The tag being assigned is already assigned to another person.");
+            $alert.$danger("Tag assignment failed.  The tag being assigned is already assigned to another person.");
           }
 
           else {
@@ -270,6 +278,8 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
             //$scope.submitError = "An error occurred while associating this tag: " + fault.status + " - " + fault.statusText;
             //$scope.response = response;
           }
+          
+          $scope.associationInProgress = false;
         };
 
         // Just submit the association and report any errors

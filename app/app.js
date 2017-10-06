@@ -8,7 +8,6 @@ require('./associate/associate.js');
 require('./version/version.js');
 require('./focus/focus.js');
 require('./reports/reports.js');
-require('./spinner/spinner.js');
 require('./unassociate/unassociate.js');
 require('./welcome/welcome.js');
 
@@ -20,6 +19,9 @@ require('bootswatch/paper/bootstrap.min.css');
 
 // Required to style Angular-UI Grid controls
 require('angular-ui-grid/ui-grid.css');
+
+// Loading bar css
+require('angular-loading-bar/build/loading-bar.min.css');
 /******************************************************************************/
 
 
@@ -32,17 +34,12 @@ angular.module('myApp', [
   'ui.router',
   'ui.bootstrap',
   'ui.grid',
+  'angular-loading-bar',
   'myApp.alert',
   'myApp.associate',
   'myApp.focus',
   'myApp.reports',
-  'myApp.spinner',
   'myApp.unassociate',
   'myApp.version',
   'myApp.welcome'
-]).
-
-config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-  // Point any unknown URLs back to the root
-  $urlRouterProvider.otherwise('/');
-}]);
+]);

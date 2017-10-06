@@ -49,6 +49,21 @@
 	to 		{ -webkit-transform: translateX(0); }
 }
 
+.alert-fade.ng-enter {
+  transition: 0.5s linear all;
+  opacity: 0;
+}
+.alert-fade.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+.alert-fade.ng-leave {
+  transition: 1s linear all;
+  opacity: 1;
+}
+.alert-fade.ng-leave.ng-leave-active {
+  opacity: 0;
+}
+
 /* Hide undesired underline below link in webkit browsers (i.e. Chrome). */
 a:-webkit-any-link{
 text-decoration:none !important;

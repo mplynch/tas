@@ -16,41 +16,42 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
   })
 
   .state('reports.menu', {
+    url: '/reports',
     template: menuTemplate
-    })
+  })
 
   .state('reports.all', {
     template: allTagsTemplate,
-    controller: 'ReportsCtrl'
+    controller: 'AllTagsReportCtrl'
   })
 
   .state('reports.associated', {
     template: associatedTagsTemplate,
-    controller: 'ReportsCtrl'
+    controller: 'AssociatedTagsReportCtrl'
   })
 
   .state('reports.unassociated', {
     template: unassociatedTagsTemplate,
-    controller: 'ReportsCtrl'
+    controller: 'UnassociatedTagsReportCtrl'
   })
 
   .state('reports.lost', {
     template: lostTagsTemplate,
-    controller: 'ReportsCtrl'
+    controller: 'LostTagsReportCtrl'
   });
 }])
 
-.service('ReportsService', ['$http', '$log', '$q', function($http, $log, $q) {
+.service('ReportsService', ['$http', '$log', function($http, $log) {
   this.getAllTags = function() {
-    return $http.get('/tads/api/v1/views/all_tags', {cache: true}).then(
+    return $http.get('/tads/api/v1/views/all_tags', {timeout: 5000, cache: true}).then(
       function(response) {
         return response.data;
       }
     );
   }
 
-  this.getAssignedTags = function() {
-    return $http.get('/tads/api/v1/views/current_tags', {cache: true}).then(
+  this.getAssociatedTags = function() {
+    return $http.get('/tads/api/v1/views/current_tags', {timeout: 5000, cache: true}).then(
       function(response) {
         return response.data;
       }
@@ -58,15 +59,15 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
   }
 
   this.getLostTags = function() {
-    return $http.get('/tads/api/v1/views/lost_tags', {cache: true}).then(
+    return $http.get('/tads/api/v1/views/lost_tags', {timeout: 5000, cache: true}).then(
       function(response) {
         return response.data;
       }
     );
   }
 
-  this.getUnassignedTags = function() {
-    return $http.get('/tads/api/v1/views/available_tags', {cache: true}).then(
+  this.getUnassociatedTags = function() {
+    return $http.get('/tads/api/v1/views/available_tags', {timeout: 5000, cache: true}).then(
       function(response) {
         return response.data;
       }
@@ -74,7 +75,7 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
   }
 }])
 
-.controller('ReportsCtrl', ['$scope', '$log', '$alert', 'ReportsService', function($scope, $log, $alert, ReportsService) {
+.controller('AllTagsReportCtrl', ['$scope', '$log', '$alert', 'ReportsService', function($scope, $log, $alert, ReportsService) {
   $scope.allTagsGridOptions = {
     columnDefs: [
       { name:'MAC Address', field: 'MAC_Address' },
@@ -83,19 +84,6 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
       { name:'First Name', field: 'FirstName' },
       { name:'Middle Name', field: 'MiddleName' },
       { name:'Company', field: 'Company' }
-    ],
-    data: []
-  };
-
-  $scope.associatedTagsGridOptions = {
-    columnDefs: [
-      { name:'MAC Address', field: 'MAC_Address' },
-      { name:'First Name', field: 'FirstName' },
-      { name:'Middle Name', field: 'MiddleName' },
-      { name:'Last Name', field: 'LastName' },
-      { name:'Company', field: 'Company' },
-      { name:'Employee Number', field: "EmployeeNumber"},
-      { name:'Crew Code', field: "CrewCode"}
     ],
     data: []
   };
@@ -109,18 +97,35 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
         $alert.$danger('Failed to retrieve the All Tags report!');
       }
     );
+  }])
 
-    ReportsService.getAssignedTags().then(
+  .controller('AssociatedTagsReportCtrl', ['$scope', '$log', '$alert', 'ReportsService', function($scope, $log, $alert, ReportsService) {
+    $scope.associatedTagsGridOptions = {
+      columnDefs: [
+        { name:'MAC Address', field: 'MAC_Address' },
+        { name:'First Name', field: 'FirstName' },
+        { name:'Middle Name', field: 'MiddleName' },
+        { name:'Last Name', field: 'LastName' },
+        { name:'Company', field: 'Company' },
+        { name:'Employee Number', field: "EmployeeNumber"},
+        { name:'Crew Code', field: "CrewCode"}
+      ],
+      data: []
+    };
+
+    ReportsService.getAssociatedTags().then(
       function(success) {
         $scope.associatedTagsGridOptions.data = success;
       })
       .catch(
         function(error) {
-          $alert.$danger('Failed to retrieve the Assigned Tags report!');
+          $alert.$danger('Failed to retrieve the Associated Tags report!');
         }
       );
+    }])
 
-      ReportsService.getUnassignedTags().then(
+    .controller('UnassociatedTagsReportCtrl', ['$scope', '$log', '$alert', 'ReportsService', function($scope, $log, $alert, ReportsService) {
+      ReportsService.getUnassociatedTags().then(
         function(success) {
           $scope.unassignedTags = success;
         })
@@ -129,6 +134,8 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
             $alert.$danger('Failed to retrieve the Unassigned Tags report!');
           }
         );
+      }])
 
-        // TODO: Support printing of tables: https://dzone.com/articles/building-simple-angularjs
+      .controller('LostTagsReportCtrl', ['$scope', '$log', '$alert', 'ReportsService', function($scope, $log, $alert, ReportsService) {
+
       }]);

@@ -13,6 +13,7 @@ module.exports = {
       'angular-ui-bootstrap',
       'angular-ui-grid',
       'angular-loader',
+      'angular-loading-bar',
       'angular-filter',
       'bootstrap',
       'promise-polyfill',

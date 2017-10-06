@@ -41,7 +41,7 @@
 <div class="col-md-12 col-xs-12">
   <p>&nbsp;</p>
   <p>
-    <button class="btn btn-lg btn-default" type="button" ng-click="previous()" ng-disabled="associationSuccess">Back</button>
-    <button class="btn btn-lg btn-success" type="button" ng-click="submit()" ng-disabled="associationSuccess">Submit</button>
+    <button class="btn btn-lg btn-default" type="button" ng-click="previous()" ng-disabled="associationSuccess || associationInProgress">Back</button>
+    <button class="btn btn-lg btn-success" type="button" ng-click="submit()" ng-disabled="associationSuccess || associationInProgress">Submit</button>
   </p>
 </div>
