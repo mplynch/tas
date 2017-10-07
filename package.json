@@ -28,6 +28,7 @@
     "jquery": "^3.2.1",
     "ng-cache-loader": "0.0.25",
     "open-browser-webpack-plugin": "0.0.5",
+    "promise-polyfill": "^6.0.2",
     "style-loader": "^0.18.2",
     "unminified-webpack-plugin": "^1.2.0",
     "url-loader": "^0.5.9",
