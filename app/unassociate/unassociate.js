@@ -88,13 +88,13 @@ angular.module('myApp.unassociate', ['ui.router'])
       .catch(
         function(error) {
           if (error.status == -1) {
-            $alert.$danger('Failed to load personnel.  The request timed out.');
+            $alert.$danger('Failed to load personnel.  The request timed out.', 'lookupForm');
             $log.error('Failed to get personnel!');
           }
 
           else {
             $alert.$danger('Failed to load personnel: ' + error.status + " - " +
-              error.statusText);
+              error.statusText, 'lookupForm');
             $log.error('Failed to get personnel!');
           }
         }

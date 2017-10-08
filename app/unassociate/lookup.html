@@ -4,6 +4,9 @@
       <h3 class="modal-title" id="modal-title">Lookup Tag By Name</h3>
     </div>
     <div class="modal-body form-horizontal" id="modal-body">
+      <div ng-controller="AlertCtrl">
+        <div uib-alert ng-repeat="alert in alerts | filterBy: ['target']: 'lookupForm'" dismiss-on-timeout="5000" ng-class="'alert-fade alert-' + (alert.type || 'warning')" close="closeAlert($index)">{{alert.msg}}</div>
+      </div>
       <div class="form-group">
         <label for="person" class="col-md-4 control-label">Personnel:</label>
         <div class="col-md-8">

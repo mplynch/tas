@@ -12,52 +12,51 @@ angular.module('myApp.alert', [])
     alerts = [];
   };
 
-  var closeAlert = function (index, clearOthers) {
+  var closeAlert = function (index) {
     alerts.splice(index, 1);
   };
 
-  var createAlert = function (type, message, clearOthers) {
-    if (clearOthers)
-    alerts = [];
+  var createAlert = function (type, message, target) {
+    target = target || '';
 
-    alerts.push({type: type, msg: message});
+    alerts.push({type: type, msg: message, target: target});
   };
 
-  var alertSuccess = function (message, clearOthers) {
-    clearOthers = clearOthers;
-    createAlert('success', message, clearOthers);
+  var alertSuccess = function (message, target) {
+    target = target || '';
+    createAlert('success', message, target);
   };
 
-  var alertInfo = function (message, clearOthers) {
-    clearOthers = clearOthers;
-    createAlert('info', message, clearOthers);
+  var alertInfo = function (message, target) {
+    target = target || '';
+    createAlert('info', message, target);
   };
 
-  var alertWarning = function (message, clearOthers) {
-    clearOthers = clearOthers;
-    createAlert('warning', message, clearOthers);
+  var alertWarning = function (message, target) {
+    target = target || '';
+    createAlert('warning', message, target);
   };
 
-  var alertDanger = function (message, clearOthers) {
-    clearOthers = clearOthers;
-    createAlert('danger', message, clearOthers);
+  var alertDanger = function (message, target) {
+    target = target || '';
+    createAlert('danger', message, target);
   };
 
   return {
     $alerts: function () {
       return alerts;
     },
-    $success: function (message, clearOthers) {
-      return alertSuccess(message, clearOthers);
+    $success: function (message, target) {
+      return alertSuccess(message, target);
     },
-    $info: function (message, clearOthers) {
-      return alertInfo(message, clearOthers);
+    $info: function (message, target) {
+      return alertInfo(message, target);
     },
-    $warning: function (message, clearOthers) {
-      return alertWarning(message, clearOthers);
+    $warning: function (message, target) {
+      return alertWarning(message, target);
     },
-    $danger: function (message, clearOthers) {
-      return alertDanger(message, clearOthers);
+    $danger: function (message, target) {
+      return alertDanger(message, target);
     },
     $clear: function () {
       return clearAlerts();
