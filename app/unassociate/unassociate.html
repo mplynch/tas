@@ -11,22 +11,28 @@
           Association successful!  <a ng-click="reset()">Click here to unassociate another tag.</a>
         </div>
       </div>
-      <div class="col-md-3 col-xs-2"></div>
-      <div class="col-md-6 col-xs-8">
-        <img class="img-responsive center-block" src="/img/scan.png">
-        <div class="form-group">
-          <input type="text" class="form-control" id="macaddress" ng-model="macaddress" ng-pattern="/^[0-9ABCDEFabcdef]{12}$/" focus="true" placeholder="Barcode" required>
+      <div class="container">
+        <div class="row">
+          <img class="img-responsive center-block" src="/img/scan.png">
+        </div>
+        <div class="row">
+          <div class="col-md-3 col-xs-2"></div>
+          <div class="col-md-6 col-xs-8">
+            <input type="text" class="form-control" id="macaddress" ng-model="macaddress" ng-pattern="/^[0-9ABCDEFabcdef]{12}$/" focus="true" placeholder="Barcode" required>
+          </div>
+          <div class="col-md-3 col-xs-2 text-left">
+            <button class="btn btn-primary" type="button" ng-click="showLookupPersonModal()"><span class="glyphicon glyphicon-search"></span> Lookup</button>
+          </div>
         </div>
       </div>
-      <div class="col-md-3  col-xs-2"></div>
-
-      <div class="col-md-12 col-xs-12">
+      <div class="row col-md-12 col-xs-12">
         <p>&nbsp;</p>
         <p>
           <button class="btn btn-lg btn-success" type="button" ng-click="unassociate()" ng-disabled="unassociateForm.$invalid || unassociationSuccess || unassociationInProgress">Unassociate</button>
         </p>
       </div>
-
     </div>
-  </form>
+
+  </div>
+</form>
 </div>

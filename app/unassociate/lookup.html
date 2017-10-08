@@ -1,0 +1,23 @@
+<div class="modal-demo">
+  <form name="lookupForm" novalidate>
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-title">Lookup Tag By Name</h3>
+    </div>
+    <div class="modal-body form-horizontal" id="modal-body">
+      <div class="form-group">
+        <label for="person" class="col-md-4 control-label">Personnel:</label>
+        <div class="col-md-8">
+          <select ng-model="person" class="form-control" name="person"
+            ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName group by person.Company for person in personnel | omit: '!MAC_Address'"
+            ng-required="true">
+        </select>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="ok()" ng-disabled="lookupForm.$invalid">OK</button>
+      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>
