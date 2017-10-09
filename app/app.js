@@ -6,7 +6,6 @@
 require('./alert/alert.js');
 require('./associate/associate.js');
 require('./version/version.js');
-require('./focus/focus.js');
 require('./reports/reports.js');
 require('./unassociate/unassociate.js');
 require('./welcome/welcome.js');
@@ -37,7 +36,6 @@ angular.module('myApp', [
   'angular-loading-bar',
   'myApp.alert',
   'myApp.associate',
-  'myApp.focus',
   'myApp.reports',
   'myApp.unassociate',
   'myApp.version',
