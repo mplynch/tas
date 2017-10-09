@@ -1,4 +1,4 @@
-# # Tag Assignment System
+## Tag Assignment System
 
 A Jacobs Connected Enterprise tool used for assigning personnel tracking tags.
 
@@ -21,3 +21,4 @@ A Jacobs Connected Enterprise tool used for assigning personnel tracking tags.
 2. Navigate to your clone and run `npm install`
 3. Run `npm run build` to execute a webpack build of the application
 4. Copy the contents of /dist to your web server and navigate to index.html
+5. Configure URL rewriting in your web server to point to the TAS backend web service.
