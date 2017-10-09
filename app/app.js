@@ -10,6 +10,9 @@ require('./reports/reports.js');
 require('./unassociate/unassociate.js');
 require('./welcome/welcome.js');
 
+// Loading bar css
+require('angular-loading-bar/build/loading-bar.min.css');
+
 // Include the app's custom styling
 require("./app.css");
 
@@ -19,8 +22,6 @@ require('bootswatch/paper/bootstrap.min.css');
 // Required to style Angular-UI Grid controls
 require('angular-ui-grid/ui-grid.css');
 
-// Loading bar css
-require('angular-loading-bar/build/loading-bar.min.css');
 /******************************************************************************/
 
 
@@ -42,7 +43,9 @@ angular.module('myApp', [
   'myApp.welcome'
 ]).
 
-config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+config(['$stateProvider', '$urlRouterProvider', 'cfpLoadingBarProvider', function($stateProvider, $urlRouterProvider, cfpLoadingBarProvider) {
   // Point any unknown URLs back to the root
   $urlRouterProvider.otherwise('/');
+
+  cfpLoadingBarProvider.latencyThreshold = 1;
 }]);
