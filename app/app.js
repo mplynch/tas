@@ -42,4 +42,9 @@ angular.module('myApp', [
   'myApp.unassociate',
   'myApp.version',
   'myApp.welcome'
-]);
+]).
+
+config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+  // Point any unknown URLs back to the root
+  $urlRouterProvider.otherwise('/');
+}]);
