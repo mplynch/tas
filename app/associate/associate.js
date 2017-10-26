@@ -197,6 +197,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
 
       else if ($state.includes("associate.person")) {
         SubscribeService.selectedPerson = $scope.person;
+        SubscribeService.macaddress = $scope.macaddress = '';
 
         $state.go('associate.scan');
       }
@@ -218,6 +219,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
       }
 
       else if ($state.includes("associate.finish")) {
+        SubscribeService.macaddress = $scope.macaddress = '';
         $state.go('associate.scan');
       }
     };
@@ -278,7 +280,7 @@ angular.module('myApp.associate', ['ui.router', 'ui.bootstrap'])
             //$scope.submitError = "An error occurred while associating this tag: " + fault.status + " - " + fault.statusText;
             //$scope.response = response;
           }
-          
+
           $scope.associationInProgress = false;
         };
 

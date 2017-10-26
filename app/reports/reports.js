@@ -43,7 +43,7 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
 
 .service('ReportsService', ['$http', '$log', function($http, $log) {
   this.getAllTags = function() {
-    return $http.get('/tads/api/v1/views/all_tags', {timeout: 5000, cache: true}).then(
+    return $http.get('/tads/api/v1/views/all_tags', {timeout: 5000}).then(
       function(response) {
         return response.data;
       }
@@ -51,7 +51,7 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
   }
 
   this.getAssociatedTags = function() {
-    return $http.get('/tads/api/v1/views/current_tags', {timeout: 5000, cache: true}).then(
+    return $http.get('/tads/api/v1/views/current_tags', {timeout: 5000}).then(
       function(response) {
         return response.data;
       }
@@ -59,7 +59,7 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
   }
 
   this.getLostTags = function() {
-    return $http.get('/tads/api/v1/views/lost_tags', {timeout: 5000, cache: true}).then(
+    return $http.get('/tads/api/v1/views/lost_tags', {timeout: 5000}).then(
       function(response) {
         return response.data;
       }
@@ -67,7 +67,7 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
   }
 
   this.getUnassociatedTags = function() {
-    return $http.get('/tads/api/v1/views/available_tags', {timeout: 5000, cache: true}).then(
+    return $http.get('/tads/api/v1/views/available_tags', {timeout: 5000}).then(
       function(response) {
         return response.data;
       }
@@ -77,6 +77,7 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
 
 .controller('AllTagsReportCtrl', ['$scope', '$log', '$alert', 'ReportsService', function($scope, $log, $alert, ReportsService) {
   $scope.allTagsGridOptions = {
+    enableFiltering: true,
     columnDefs: [
       { name:'MAC Address', field: 'MAC_Address' },
       { name:'Status', field: 'Tag_Status' },
@@ -101,6 +102,7 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
 
   .controller('AssociatedTagsReportCtrl', ['$scope', '$log', '$alert', 'ReportsService', function($scope, $log, $alert, ReportsService) {
     $scope.associatedTagsGridOptions = {
+      enableFiltering: true,
       columnDefs: [
         { name:'MAC Address', field: 'MAC_Address' },
         { name:'First Name', field: 'FirstName' },
@@ -125,9 +127,14 @@ angular.module('myApp.reports', ['ui.router', 'ui.grid'])
     }])
 
     .controller('UnassociatedTagsReportCtrl', ['$scope', '$log', '$alert', 'ReportsService', function($scope, $log, $alert, ReportsService) {
+      $scope.unassociatedTagsGridOptions = {
+        enableFiltering: true,
+        data: []
+      };
+
       ReportsService.getUnassociatedTags().then(
         function(success) {
-          $scope.unassignedTags = success;
+          $scope.unassociatedTagsGridOptions.data = success;
         })
         .catch(
           function(error) {

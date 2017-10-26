@@ -11,7 +11,7 @@
         <label for="person" class="col-md-4 control-label">Personnel:</label>
         <div class="col-md-8">
           <select ng-model="person" class="form-control" name="person"
-            ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName group by person.Company for person in personnel | omit: '!MAC_Address'"
+            ng-options="person as person.LastName + ', ' + person.FirstName + ' ' + person.MiddleName group by person.Company for person in personnel | omit: '!MAC_Address' | orderBy: ['Company', 'LastName', 'FirstName']"
             ng-required="true">
         </select>
         </div>
